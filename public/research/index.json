@@ -1,0 +1,107 @@
+{
+  "categories": [
+    {
+      "id": "busch-gardens",
+      "title": "Busch Gardens Design Research",
+      "description": "Comprehensive landscape design inspiration from Busch Gardens Williamsburg",
+      "icon": "🎨",
+      "color": "from-purple-500 to-indigo-600",
+      "documents": [
+        {
+          "id": "readme",
+          "title": "Research Overview",
+          "file": "busch-gardens/README.md",
+          "description": "Complete overview of Busch Gardens research project"
+        },
+        {
+          "id": "landscape-design",
+          "title": "Landscape Design Elements",
+          "file": "busch-gardens/busch-gardens-landscape-design.md",
+          "description": "Core landscape design principles and elements"
+        },
+        {
+          "id": "landscape-research",
+          "title": "Detailed Landscape Research",
+          "file": "busch-gardens/landscape-design-research.md",
+          "description": "In-depth analysis of landscape techniques"
+        },
+        {
+          "id": "themed-areas",
+          "title": "Themed Areas Analysis",
+          "file": "busch-gardens/themed-areas-research.md",
+          "description": "European-themed area designs and concepts"
+        },
+        {
+          "id": "visitor-experience",
+          "title": "Visitor Experience Design",
+          "file": "busch-gardens/visitor-experience-research.md",
+          "description": "Guest journey and experience design patterns"
+        },
+        {
+          "id": "visual-assets",
+          "title": "Visual Assets Library",
+          "file": "busch-gardens/visual-assets-urls.md",
+          "description": "150+ curated visual reference URLs"
+        }
+      ]
+    },
+    {
+      "id": "technical",
+      "title": "Technical Research & Feasibility",
+      "description": "~100,000 words of technical analysis for VA-TX adaptation",
+      "icon": "🔬",
+      "color": "from-green-600 to-teal-600",
+      "documents": [
+        {
+          "id": "tech-readme",
+          "title": "Technical Research Overview",
+          "file": "technical/README.md",
+          "description": "Quick start guide to technical research (50 pages)"
+        },
+        {
+          "id": "tech-summary",
+          "title": "Executive Summary",
+          "file": "technical/TECHNICAL-RESEARCH-SUMMARY.md",
+          "description": "Complete technical research summary with recommendations"
+        },
+        {
+          "id": "academic-papers",
+          "title": "Academic Papers Analysis",
+          "file": "technical/academic-papers/technical-research-papers.md",
+          "description": "88 sources, 35,000 words of technical literature review"
+        },
+        {
+          "id": "va-climate",
+          "title": "Williamsburg VA Climate",
+          "file": "technical/regional-analysis/williamsburg-va-climate-landscape.md",
+          "description": "Comprehensive Virginia climate and landscape analysis"
+        },
+        {
+          "id": "tx-climate",
+          "title": "Shiner TX Climate",
+          "file": "technical/regional-analysis/shiner-tx-climate-landscape.md",
+          "description": "Texas climate analysis (76 pages, 20,000 words)"
+        },
+        {
+          "id": "gap-analysis",
+          "title": "Regional Gap Analysis",
+          "file": "technical/gap-analysis/va-tx-regional-comparison.md",
+          "description": "VA-TX comparison and adaptation requirements (47 pages)"
+        },
+        {
+          "id": "plant-guide",
+          "title": "Texas Plant Adaptation Guide",
+          "file": "technical/gap-analysis/texas-plant-adaptation-guide.md",
+          "description": "Complete plant substitution guide (69 pages, 18,000 words)"
+        }
+      ]
+    }
+  ],
+  "stats": {
+    "totalDocuments": 13,
+    "totalWords": 100000,
+    "totalImages": 23,
+    "categories": 2,
+    "researchHours": 120
+  }
+}

@@ -62,14 +62,52 @@ export default function DashboardPage() {
           <div className="rounded-xl bg-white p-6 shadow-lg">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600">Project Plans</p>
-                <p className="mt-2 text-3xl font-bold text-green-600">0</p>
+                <p className="text-sm font-medium text-gray-600">Research Docs</p>
+                <p className="mt-2 text-3xl font-bold text-green-600">13</p>
               </div>
               <div className="rounded-full bg-green-100 p-3">
                 <svg className="h-8 w-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                 </svg>
               </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Research Center - Prominent Feature */}
+        <div className="mb-8 rounded-xl bg-gradient-to-r from-blue-600 to-purple-700 p-8 text-white shadow-xl">
+          <div className="flex items-center justify-between">
+            <div className="flex-1">
+              <div className="mb-2 flex items-center gap-3">
+                <span className="text-4xl">🔬</span>
+                <h2 className="text-3xl font-bold">Research Center</h2>
+              </div>
+              <p className="mb-4 text-lg text-blue-50">
+                Access comprehensive landscape research: 13 documents, 100K+ words, 23 images
+              </p>
+              <div className="mb-6 flex flex-wrap gap-4">
+                <div className="rounded-lg bg-white/20 px-4 py-2 backdrop-blur-sm">
+                  <p className="text-sm text-blue-100">Busch Gardens Design</p>
+                  <p className="text-2xl font-bold">6 Docs</p>
+                </div>
+                <div className="rounded-lg bg-white/20 px-4 py-2 backdrop-blur-sm">
+                  <p className="text-sm text-blue-100">Technical Research</p>
+                  <p className="text-2xl font-bold">7 Docs</p>
+                </div>
+                <div className="rounded-lg bg-white/20 px-4 py-2 backdrop-blur-sm">
+                  <p className="text-sm text-blue-100">Research Hours</p>
+                  <p className="text-2xl font-bold">120+</p>
+                </div>
+              </div>
+              <Link
+                href="/research"
+                className="inline-flex items-center rounded-lg bg-white px-6 py-3 font-semibold text-purple-700 transition hover:bg-blue-50"
+              >
+                Explore Research Center
+                <svg className="ml-2 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                </svg>
+              </Link>
             </div>
           </div>
         </div>
