@@ -5,11 +5,12 @@ import { prisma } from "@/lib/prisma"
 // GET /api/images/[id] - Get single image
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params
     const image = await prisma.image.findUnique({
-      where: { id: params.id },
+      where: { id },
       include: {
         user: {
           select: {
@@ -54,9 +55,10 @@ export async function GET(
 // PUT /api/images/[id] - Update image
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params
     const session = await auth()
 
     if (!session?.user?.id) {
@@ -71,7 +73,7 @@ export async function PUT(
 
     // Check if user owns the image or is admin
     const existingImage = await prisma.image.findUnique({
-      where: { id: params.id },
+      where: { id },
     })
 
     if (!existingImage) {
@@ -93,7 +95,7 @@ export async function PUT(
     }
 
     const image = await prisma.image.update({
-      where: { id: params.id },
+      where: { id },
       data: {
         title,
         description,
@@ -125,9 +127,10 @@ export async function PUT(
 // DELETE /api/images/[id] - Delete image
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params
     const session = await auth()
 
     if (!session?.user?.id) {
@@ -139,7 +142,7 @@ export async function DELETE(
 
     // Check if user owns the image or is admin
     const existingImage = await prisma.image.findUnique({
-      where: { id: params.id },
+      where: { id },
     })
 
     if (!existingImage) {
@@ -161,7 +164,7 @@ export async function DELETE(
     }
 
     await prisma.image.delete({
-      where: { id: params.id },
+      where: { id },
     })
 
     return NextResponse.json({ message: "Image deleted successfully" })
