@@ -1,11 +1,9 @@
 "use client"
 
 import Link from "next/link"
-import { useSession, signIn, signOut } from "next-auth/react"
 import { useState } from "react"
 
 export function Navbar() {
-  const { data: session, status } = useSession()
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
   return (
@@ -60,34 +58,6 @@ export function Navbar() {
               >
                 Busch Gardens
               </Link>
-
-              {/* Auth Button */}
-              {status === "loading" ? (
-                <div className="h-8 w-20 animate-pulse rounded bg-green-700" />
-              ) : session ? (
-                <div className="flex items-center space-x-3">
-                  {session.user?.image && (
-                    <img
-                      src={session.user.image}
-                      alt={session.user.name || "User"}
-                      className="h-8 w-8 rounded-full border-2 border-white"
-                    />
-                  )}
-                  <button
-                    onClick={() => signOut()}
-                    className="rounded-md bg-amber-600 px-4 py-2 text-sm font-medium text-white hover:bg-amber-700 transition"
-                  >
-                    Sign Out
-                  </button>
-                </div>
-              ) : (
-                <button
-                  onClick={() => signIn()}
-                  className="rounded-md bg-amber-600 px-4 py-2 text-sm font-medium text-white hover:bg-amber-700 transition"
-                >
-                  Sign In
-                </button>
-              )}
             </div>
           </div>
 
@@ -170,22 +140,6 @@ export function Navbar() {
             >
               Busch Gardens
             </Link>
-
-            {session ? (
-              <button
-                onClick={() => signOut()}
-                className="block w-full rounded-md bg-amber-600 px-3 py-2 text-left text-base font-medium text-white hover:bg-amber-700"
-              >
-                Sign Out
-              </button>
-            ) : (
-              <button
-                onClick={() => signIn()}
-                className="block w-full rounded-md bg-amber-600 px-3 py-2 text-left text-base font-medium text-white hover:bg-amber-700"
-              >
-                Sign In
-              </button>
-            )}
           </div>
         </div>
       )}
