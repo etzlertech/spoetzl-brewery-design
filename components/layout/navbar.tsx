@@ -58,6 +58,12 @@ export function Navbar() {
               >
                 Busch Gardens
               </Link>
+              <Link
+                href="/skills"
+                className="rounded-md px-3 py-2 text-sm font-medium text-white hover:bg-green-700 transition"
+              >
+                Skills
+              </Link>
             </div>
           </div>
 
@@ -139,6 +145,13 @@ export function Navbar() {
               onClick={() => setMobileMenuOpen(false)}
             >
               Busch Gardens
+            </Link>
+            <Link
+              href="/skills"
+              className="block rounded-md px-3 py-2 text-base font-medium text-white hover:bg-green-700"
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              Skills
             </Link>
           </div>
         </div>
