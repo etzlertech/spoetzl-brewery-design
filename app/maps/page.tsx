@@ -8,7 +8,6 @@ import type { Zone, Layer } from '@/models/mapping/types';
 
 interface ZoneWithLayer extends Zone {
   layerName: string;
-  layerColor: string;
 }
 
 export default function MapsPage() {
@@ -45,7 +44,6 @@ export default function MapsPage() {
           return {
             ...zone,
             layerName: layer?.name || 'Unknown Layer',
-            layerColor: layer?.color || '#808080',
           };
         });
 
@@ -228,10 +226,7 @@ export default function MapsPage() {
                     <div className="flex items-center gap-2 text-gray-700">
                       <Layers className="w-4 h-4 text-gray-400" />
                       <span className="font-medium">Layer:</span>
-                      <span
-                        className="px-2 py-0.5 rounded text-xs font-semibold text-white"
-                        style={{ backgroundColor: zone.layerColor }}
-                      >
+                      <span className="px-2 py-1 rounded text-xs font-semibold bg-gray-100 text-gray-700 border border-gray-300">
                         {zone.layerName}
                       </span>
                     </div>
