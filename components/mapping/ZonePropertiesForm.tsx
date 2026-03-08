@@ -126,35 +126,30 @@ export default function ZonePropertiesForm({
   return (
     <div className="fixed inset-0 z-[2000] bg-black bg-opacity-50 flex items-end md:items-center md:justify-center">
       {/* Mobile: Bottom Sheet | Desktop: Centered Modal */}
-      <div className="bg-white w-full md:max-w-md md:mx-4 rounded-t-2xl md:rounded-lg shadow-xl max-h-[90vh] flex flex-col">
-        {/* Header */}
-        <div className="px-4 md:px-6 py-4 border-b border-gray-200 flex-shrink-0">
-          <div className="flex items-start justify-between">
-            <div className="flex-1">
-              <h2 className="text-xl font-bold text-gray-900">Create Zone</h2>
-              <p className="text-sm text-gray-600 mt-1">
-                {coordinates.length - 1} points
-              </p>
-            </div>
-            {/* Close button for mobile */}
+      <div className="bg-white w-full md:max-w-md md:mx-4 rounded-t-2xl md:rounded-lg shadow-xl h-[100dvh] md:h-auto md:max-h-[90vh] flex flex-col">
+        {/* Header - Compact */}
+        <div className="px-4 py-2 border-b border-gray-200 flex-shrink-0">
+          <div className="flex items-center justify-between">
+            <h2 className="text-lg font-bold text-gray-900">Create Zone ({coordinates.length - 1} pts)</h2>
+            {/* Close button */}
             <button
               type="button"
               onClick={handleCancel}
-              className="md:hidden p-2 text-gray-400 hover:text-gray-600 rounded-lg"
+              className="p-1 text-gray-400 hover:text-gray-600 rounded-lg"
             >
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
               </svg>
             </button>
           </div>
         </div>
 
-        {/* Form - Scrollable */}
-        <form onSubmit={handleSubmit} className="flex-1 overflow-y-auto">
-          <div className="p-4 md:p-6 space-y-5">
+        {/* Form - No scroll on mobile */}
+        <form onSubmit={handleSubmit} className="flex-1 flex flex-col overflow-hidden">
+          <div className="flex-1 px-4 py-3 space-y-2 overflow-y-auto md:overflow-visible">
             {/* Zone Name */}
             <div>
-              <label htmlFor="zone-name" className="block text-sm font-semibold text-gray-700 mb-2">
+              <label htmlFor="zone-name" className="block text-xs font-semibold text-gray-700 mb-1">
                 Zone Name *
               </label>
               <input
@@ -162,36 +157,21 @@ export default function ZonePropertiesForm({
                 id="zone-name"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                placeholder="e.g., Main Entrance, Parking Lot A"
+                placeholder="e.g., Main Entrance"
                 className={`
-                  w-full px-4 py-3 text-base border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent
+                  w-full px-3 py-2 text-sm border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent
                   ${errors.name ? 'border-red-500' : 'border-gray-300'}
                 `}
                 required
               />
               {errors.name && (
-                <p className="mt-1 text-sm text-red-600">{errors.name}</p>
+                <p className="mt-0.5 text-xs text-red-600">{errors.name}</p>
               )}
-            </div>
-
-            {/* Description */}
-            <div>
-              <label htmlFor="zone-description" className="block text-sm font-semibold text-gray-700 mb-2">
-                Description (Optional)
-              </label>
-              <textarea
-                id="zone-description"
-                value={description}
-                onChange={(e) => setDescription(e.target.value)}
-                placeholder="Add notes about this zone..."
-                rows={3}
-                className="w-full px-4 py-3 text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
-              />
             </div>
 
             {/* Layer Selection */}
             <div>
-              <label htmlFor="zone-layer" className="block text-sm font-semibold text-gray-700 mb-2">
+              <label htmlFor="zone-layer" className="block text-xs font-semibold text-gray-700 mb-1">
                 Layer *
               </label>
               <select
@@ -199,12 +179,12 @@ export default function ZonePropertiesForm({
                 value={layerId}
                 onChange={(e) => setLayerId(e.target.value)}
                 className={`
-                  w-full px-4 py-3 text-base border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent
+                  w-full px-3 py-2 text-sm border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent
                   ${errors.layerId ? 'border-red-500' : 'border-gray-300'}
                 `}
                 required
               >
-                <option value="">Select a layer...</option>
+                <option value="">Select layer...</option>
                 {layers.map(layer => (
                   <option key={layer.id} value={layer.id}>
                     {layer.name}
@@ -212,59 +192,70 @@ export default function ZonePropertiesForm({
                 ))}
               </select>
               {errors.layerId && (
-                <p className="mt-1 text-sm text-red-600">{errors.layerId}</p>
+                <p className="mt-0.5 text-xs text-red-600">{errors.layerId}</p>
               )}
             </div>
 
-            {/* Color Picker */}
+            {/* Description - Compact single line */}
             <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-3">
-                Fill Color
+              <label htmlFor="zone-description" className="block text-xs font-semibold text-gray-700 mb-1">
+                Notes (Optional)
               </label>
-              {/* Color presets - larger touch targets */}
-              <div className="grid grid-cols-4 gap-3 mb-4">
-                {COLOR_PRESETS.map(preset => (
+              <input
+                type="text"
+                id="zone-description"
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+                placeholder="Brief notes..."
+                className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              />
+            </div>
+
+            {/* Color Picker - Compact */}
+            <div>
+              <label className="block text-xs font-semibold text-gray-700 mb-1">
+                Color
+              </label>
+              <div className="flex items-center gap-2">
+                {/* Quick color presets - only 4 most common */}
+                {COLOR_PRESETS.slice(0, 4).map(preset => (
                   <button
                     key={preset.value}
                     type="button"
                     onClick={() => setFillColor(preset.value)}
                     className={`
-                      h-14 rounded-xl border-3 transition-all active:scale-95
+                      h-10 w-10 rounded-lg border-2 transition-all active:scale-95
                       ${fillColor === preset.value
-                        ? 'border-gray-900 ring-2 ring-blue-500 ring-offset-2 scale-105'
-                        : 'border-gray-300 hover:border-gray-400'
+                        ? 'border-gray-900 ring-2 ring-blue-400'
+                        : 'border-gray-300'
                       }
                     `}
                     style={{ backgroundColor: preset.value }}
-                    title={preset.name}
-                    aria-label={`Select ${preset.name} color`}
+                    aria-label={`${preset.name} color`}
                   />
                 ))}
-              </div>
-
-              {/* Custom color input */}
-              <div className="flex items-center gap-3">
+                {/* Color picker */}
                 <input
                   type="color"
                   value={fillColor}
                   onChange={(e) => setFillColor(e.target.value)}
-                  className="h-12 w-24 rounded-lg border border-gray-300 cursor-pointer"
-                  aria-label="Pick custom color"
+                  className="h-10 w-10 rounded-lg border-2 border-gray-300 cursor-pointer"
+                  aria-label="Custom color"
                 />
-                <input
-                  type="text"
-                  value={fillColor}
-                  onChange={(e) => setFillColor(e.target.value)}
-                  placeholder="#000000"
-                  className="flex-1 px-4 py-3 text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent font-mono"
-                  aria-label="Color hex value"
+                {/* Preview with opacity */}
+                <div
+                  className="flex-1 h-10 rounded-lg border-2 border-gray-300"
+                  style={{
+                    backgroundColor: fillColor,
+                    opacity: opacity
+                  }}
                 />
               </div>
             </div>
 
-            {/* Opacity Slider */}
+            {/* Opacity Slider - Compact */}
             <div>
-              <label htmlFor="zone-opacity" className="block text-sm font-semibold text-gray-700 mb-3">
+              <label htmlFor="zone-opacity" className="block text-xs font-semibold text-gray-700 mb-1">
                 Opacity: {Math.round(opacity * 100)}%
               </label>
               <input
@@ -272,44 +263,27 @@ export default function ZonePropertiesForm({
                 id="zone-opacity"
                 min="0"
                 max="1"
-                step="0.05"
+                step="0.1"
                 value={opacity}
                 onChange={(e) => setOpacity(parseFloat(e.target.value))}
-                className="w-full h-3 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-blue-600"
-                style={{ WebkitAppearance: 'none' }}
-              />
-              <div className="flex justify-between text-xs text-gray-500 mt-2">
-                <span>Transparent</span>
-                <span>Solid</span>
-              </div>
-            </div>
-
-            {/* Preview */}
-            <div className="border-2 border-gray-300 rounded-xl p-4">
-              <p className="text-sm font-semibold text-gray-700 mb-3">Preview</p>
-              <div
-                className="h-20 rounded-lg border-2 border-gray-300"
-                style={{
-                  backgroundColor: fillColor,
-                  opacity: opacity
-                }}
+                className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-blue-600"
               />
             </div>
           </div>
 
-          {/* Actions - Fixed at bottom */}
-          <div className="flex-shrink-0 p-4 md:p-6 border-t border-gray-200 bg-gray-50">
-            <div className="flex gap-3">
+          {/* Actions - Fixed at bottom, compact */}
+          <div className="flex-shrink-0 p-3 border-t border-gray-200 bg-gray-50 pb-safe">
+            <div className="flex gap-2">
               <button
                 type="button"
                 onClick={handleCancel}
-                className="flex-1 px-6 py-3 border-2 border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium text-base active:scale-95"
+                className="flex-1 px-4 py-2.5 border-2 border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium text-sm active:scale-95"
               >
                 Cancel
               </button>
               <button
                 type="submit"
-                className="flex-1 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-semibold text-base shadow-lg active:scale-95"
+                className="flex-1 px-4 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-semibold text-sm shadow-lg active:scale-95"
               >
                 Create Zone
               </button>

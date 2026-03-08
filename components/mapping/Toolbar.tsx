@@ -101,8 +101,8 @@ export default function Toolbar({
 
   return (
     <>
-      {/* Mobile Mode Switcher - Bottom Left FAB */}
-      <div className="md:hidden fixed bottom-24 left-4 z-[900] flex flex-col gap-2">
+      {/* Mobile Mode Switcher - Bottom Left FAB - Above bottom nav */}
+      <div className="md:hidden fixed bottom-20 left-4 z-[900] flex flex-col gap-2">
         {modes.map((mode) => (
           <button
             key={mode.id}

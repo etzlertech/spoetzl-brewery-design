@@ -4,6 +4,7 @@ import "./globals.css";
 import { Providers } from "@/components/layout/providers";
 import ToastNotification from "@/components/ui/ToastNotification";
 import CameraUI from "@/components/camera/CameraUI";
+import { MobileNav } from "@/components/layout/MobileNav";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -35,6 +36,7 @@ export default function RootLayout({
           {children}
           <ToastNotification />
           <CameraUI />
+          <MobileNav />
         </Providers>
       </body>
     </html>
