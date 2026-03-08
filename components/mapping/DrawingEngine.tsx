@@ -45,6 +45,12 @@ export default function DrawingEngine({
   const pointMarkersRef = useRef<L.CircleMarker[]>([]);
   const previewLineRef = useRef<L.Polyline | null>(null);
   const mouseLineRef = useRef<L.Polyline | null>(null);
+  const pointsRef = useRef<LonLatTuple[]>([]);
+
+  // Keep ref in sync with state
+  useEffect(() => {
+    pointsRef.current = points;
+  }, [points]);
 
   // Setup map event listeners when active
   useEffect(() => {
@@ -80,7 +86,7 @@ export default function DrawingEngine({
 
       cleanup();
     };
-  }, [map, isActive, points]);
+  }, [map, isActive]);
 
   // Render preview lines
   useEffect(() => {
@@ -127,48 +133,51 @@ export default function DrawingEngine({
   function handleMapClick(e: L.LeafletMouseEvent) {
     const clickedPoint: LonLatTuple = [e.latlng.lng, e.latlng.lat];
 
-    // Check if clicking near first point (to close polygon)
-    if (points.length >= 3) {
-      const firstPoint = points[0];
-      const distance = map.distance(
-        L.latLng(firstPoint[1], firstPoint[0]),
-        e.latlng
-      );
+    setPoints(currentPoints => {
+      // Check if clicking near first point (to close polygon)
+      if (currentPoints.length >= 3) {
+        const firstPoint = currentPoints[0];
+        const distance = map.distance(
+          L.latLng(firstPoint[1], firstPoint[0]),
+          e.latlng
+        );
 
-      // If within 10 pixels of first point, complete polygon
-      if (distance < 10 / map.getZoomScale(map.getZoom())) {
-        completePolygon();
-        return;
+        // If within 10 pixels of first point, complete polygon
+        if (distance < 10 / map.getZoomScale(map.getZoom())) {
+          completePolygon();
+          return currentPoints; // Don't add new point
+        }
       }
-    }
 
-    // Add new point
-    const newPoints = [...points, clickedPoint];
-    setPoints(newPoints);
+      // Add new point
+      const newPoints = [...currentPoints, clickedPoint];
 
-    // Add marker for this point
-    const marker = L.circleMarker(e.latlng, {
-      radius: 6,
-      fillColor: '#3B82F6',
-      fillOpacity: 1,
-      color: '#FFFFFF',
-      weight: 2
-    }).addTo(map);
+      // Add marker for this point
+      const marker = L.circleMarker(e.latlng, {
+        radius: 6,
+        fillColor: '#3B82F6',
+        fillOpacity: 1,
+        color: '#FFFFFF',
+        weight: 2
+      }).addTo(map);
 
-    // First point gets special styling (green)
-    if (newPoints.length === 1) {
-      marker.setStyle({
-        fillColor: '#10B981',
-        radius: 8
-      });
-    }
+      // First point gets special styling (green)
+      if (newPoints.length === 1) {
+        marker.setStyle({
+          fillColor: '#10B981',
+          radius: 8
+        });
+      }
 
-    pointMarkersRef.current.push(marker);
+      pointMarkersRef.current.push(marker);
 
-    // Show hint after first point
-    if (newPoints.length === 1) {
-      ErrorService.showToast('Click to add more points. Click the first point or press Enter to complete.', 'info', 5000);
-    }
+      // Show hint after first point
+      if (newPoints.length === 1) {
+        ErrorService.showToast('Click to add more points. Click the first point or press Enter to complete.', 'info', 5000);
+      }
+
+      return newPoints;
+    });
   }
 
   /**
@@ -182,34 +191,44 @@ export default function DrawingEngine({
    * Handle keyboard shortcuts
    */
   function handleKeyPress(e: L.LeafletKeyboardEvent) {
-    if (e.originalEvent.key === 'Enter' && points.length >= 3) {
-      completePolygon();
-    } else if (e.originalEvent.key === 'Escape') {
-      cancel();
-    } else if (e.originalEvent.key === 'Backspace' && points.length > 0) {
-      // Remove last point
-      const newPoints = points.slice(0, -1);
-      setPoints(newPoints);
+    setPoints(currentPoints => {
+      if (e.originalEvent.key === 'Enter' && currentPoints.length >= 3) {
+        completePolygon();
+        return currentPoints;
+      } else if (e.originalEvent.key === 'Escape') {
+        cancel();
+        return currentPoints;
+      } else if (e.originalEvent.key === 'Backspace' && currentPoints.length > 0) {
+        // Remove last point
+        const newPoints = currentPoints.slice(0, -1);
 
-      // Remove last marker
-      const lastMarker = pointMarkersRef.current.pop();
-      if (lastMarker) {
-        map.removeLayer(lastMarker);
+        // Remove last marker
+        const lastMarker = pointMarkersRef.current.pop();
+        if (lastMarker) {
+          map.removeLayer(lastMarker);
+        }
+
+        return newPoints;
       }
-    }
+
+      return currentPoints;
+    });
   }
 
   /**
    * Complete polygon and validate
    */
   function completePolygon() {
-    if (points.length < 3) {
+    // Use ref to get current points value
+    const currentPoints = pointsRef.current;
+
+    if (currentPoints.length < 3) {
       ErrorService.showToast('A polygon requires at least 3 points', 'error');
       return;
     }
 
     // Close the polygon (add first point at end)
-    const closedCoordinates = [...points, points[0]];
+    const closedCoordinates = [...currentPoints, currentPoints[0]];
 
     // Validate with ZoneService
     const validation = ZoneService.validatePolygon(closedCoordinates);
