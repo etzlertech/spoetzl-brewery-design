@@ -84,7 +84,16 @@ class ImageServiceClass {
 
     const thumbnailBlob = thumbnailResult.data;
 
-    // Step 6: Create DroneImage record
+    // Step 6: Create object URLs for the blobs
+    const imageUrl = URL.createObjectURL(compressedBlob);
+    const thumbnailUrl = URL.createObjectURL(thumbnailBlob);
+
+    // Extract GPS coordinates from EXIF
+    const gpsCoordinates: LonLatTuple | null = exifData?.gps
+      ? [exifData.gps.longitude, exifData.gps.latitude]
+      : null;
+
+    // Step 7: Create DroneImage record
     const droneImage: DroneImage = {
       id: crypto.randomUUID(),
       filename: file.name,
@@ -92,10 +101,17 @@ class ImageServiceClass {
       exif: exifData,
       zoneIds,
       size: compressedBlob.size,
-      layerId
+      layerId,
+      url: imageUrl,
+      thumbnailUrl,
+      gpsCoordinates,
+      position: gpsCoordinates, // Initially set to GPS coordinates
+      rotation: 0,
+      opacity: 0.7,
+      updatedAt: new Date().toISOString()
     };
 
-    // Step 7: Store image in IndexedDB
+    // Step 8: Store image in IndexedDB
     const imageRecord: ImageRecord = {
       id: droneImage.id,
       blob: compressedBlob,
@@ -112,7 +128,7 @@ class ImageServiceClass {
       };
     }
 
-    // Step 8: Store thumbnail
+    // Step 9: Store thumbnail
     const thumbnailRecord: ThumbnailRecord = {
       id: droneImage.id,
       blob: thumbnailBlob

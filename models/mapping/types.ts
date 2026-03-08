@@ -54,12 +54,11 @@ export interface ZoneWarning {
 export interface Layer {
   id: string;                          // UUID v4
   name: string;                        // "Main Plan", "Alternative A", etc.
-  type: 'zone' | 'drone';              // Zone layer or drone image layer
   visible: boolean;                    // Toggle visibility
-  opacity: number;                     // 0.0 - 1.0, for drone layers
-  order: number;                       // Z-index for rendering order
-  createdBy: string;                   // User.id
-  createdDate: string;                 // ISO 8601
+  locked: boolean;                     // Prevent edits
+  opacity: number;                     // 0.0 - 1.0
+  createdAt: string;                   // ISO 8601
+  updatedAt: string;                   // ISO 8601
 }
 
 // ============================================================================
@@ -74,6 +73,13 @@ export interface DroneImage {
   zoneIds: string[];                   // Associated zones
   size: number;                        // Blob size in bytes
   layerId: string;                     // Reference to Layer.id
+  url: string;                         // Object URL for the image blob
+  thumbnailUrl: string;                // Object URL for the thumbnail
+  gpsCoordinates: LonLatTuple | null;  // GPS coordinates from EXIF
+  position: LonLatTuple | null;        // Current position on map (can differ from GPS)
+  rotation: number;                    // Rotation in degrees (0-360)
+  opacity: number;                     // Opacity (0-1)
+  updatedAt: string;                   // ISO 8601
 }
 
 export interface DroneAlignment {
@@ -148,12 +154,13 @@ export interface Comment {
 export interface AppState {
   version: string;                     // Schema version, e.g., "1.0.0"
   property: 'spoetzl' | 'busch';       // Property identifier
-  user: User;
+  user?: User;
   zones: Zone[];
   layers: Layer[];
-  droneAlignments: Record<string, DroneAlignment>; // Keyed by layerId
-  comments: Comment[];
-  settings: AppSettings;
+  images: DroneImage[];
+  droneAlignments?: Record<string, DroneAlignment>; // Keyed by layerId
+  comments?: Comment[];
+  settings?: AppSettings;
   lastModified: string;                // ISO 8601
 }
 
