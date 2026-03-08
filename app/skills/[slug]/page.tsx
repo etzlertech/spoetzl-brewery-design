@@ -14,8 +14,9 @@ export async function generateStaticParams() {
 }
 
 // Generate metadata for each skill
-export async function generateMetadata({ params }: { params: { slug: string } }) {
-  const skill = await getSkill(params.slug)
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params
+  const skill = await getSkill(slug)
 
   if (!skill) {
     return {
@@ -29,9 +30,12 @@ export async function generateMetadata({ params }: { params: { slug: string } })
   }
 }
 
-export default async function SkillPage({ params }: { params: { slug: string } }) {
+export default async function SkillPage({ params }: { params: Promise<{ slug: string }> }) {
+  // Await params (required in Next.js 15+)
+  const { slug } = await params
+
   // Security: getSkill() handles slug sanitization and path traversal prevention
-  const skill = await getSkill(params.slug)
+  const skill = await getSkill(slug)
 
   // 404 if skill not found
   if (!skill) {
