@@ -290,43 +290,85 @@ export default function DrawingEngine({
   }
 
   // Drawing instruction panel
-  if (!isActive || points.length === 0) return null;
+  if (!isActive) return null;
 
   return (
-    <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-[1000] bg-white rounded-lg shadow-lg border border-gray-200 px-6 py-4">
-      <div className="flex items-center gap-4">
-        <div className="flex items-center gap-3">
-          <div className="flex items-center gap-2">
-            <div className="w-3 h-3 rounded-full bg-green-500 border-2 border-white"></div>
-            <span className="text-sm text-gray-700">First point</span>
+    <div className="fixed bottom-4 left-4 right-4 md:absolute md:bottom-8 md:left-1/2 md:-translate-x-1/2 md:right-auto z-[1000] bg-white rounded-lg shadow-lg border border-gray-200">
+      {/* Mobile-first controls */}
+      <div className="p-4">
+        {/* Status */}
+        <div className="flex items-center justify-between mb-3">
+          <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2">
+              <div className="w-3 h-3 rounded-full bg-green-500 border-2 border-white"></div>
+              <span className="text-sm font-medium text-gray-700">{points.length === 0 ? 'Tap map to start' : `${points.length} points`}</span>
+            </div>
           </div>
-          <div className="flex items-center gap-2">
-            <div className="w-3 h-3 rounded-full bg-blue-500 border-2 border-white"></div>
-            <span className="text-sm text-gray-700">{points.length} points</span>
-          </div>
+          {points.length >= 3 && (
+            <span className="text-xs text-gray-500">Tap first point to close</span>
+          )}
         </div>
 
-        <div className="h-6 w-px bg-gray-300"></div>
+        {/* Action Buttons */}
+        <div className="flex gap-2">
+          {/* Undo Last Point */}
+          {points.length > 0 && (
+            <button
+              onClick={() => {
+                setPoints(currentPoints => {
+                  const newPoints = currentPoints.slice(0, -1);
+                  const lastMarker = pointMarkersRef.current.pop();
+                  if (lastMarker) {
+                    map.removeLayer(lastMarker);
+                  }
+                  return newPoints;
+                });
+              }}
+              className="flex-1 px-4 py-3 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors font-medium text-sm flex items-center justify-center gap-2"
+            >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2M3 12l6.414 6.414a2 2 0 001.414.586H19a2 2 0 002-2V7a2 2 0 00-2-2h-8.172a2 2 0 00-1.414.586L3 12z" />
+              </svg>
+              Undo
+            </button>
+          )}
 
-        <div className="flex items-center gap-2 text-sm text-gray-600">
-          <kbd className="px-2 py-1 bg-gray-100 rounded border border-gray-300 text-xs">Enter</kbd>
-          <span>Complete</span>
-          <span className="text-gray-400">•</span>
-          <kbd className="px-2 py-1 bg-gray-100 rounded border border-gray-300 text-xs">Backspace</kbd>
-          <span>Undo</span>
-          <span className="text-gray-400">•</span>
-          <kbd className="px-2 py-1 bg-gray-100 rounded border border-gray-300 text-xs">Esc</kbd>
-          <span>Cancel</span>
+          {/* Complete Zone */}
+          {points.length >= 3 && (
+            <button
+              onClick={completePolygon}
+              className="flex-1 px-4 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium text-sm flex items-center justify-center gap-2"
+            >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+              </svg>
+              Complete Zone
+            </button>
+          )}
+
+          {/* Cancel */}
+          <button
+            onClick={cancel}
+            className="px-4 py-3 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition-colors font-medium text-sm flex items-center justify-center gap-2"
+          >
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+            </svg>
+            Cancel
+          </button>
         </div>
 
-        <div className="h-6 w-px bg-gray-300"></div>
-
-        <button
-          onClick={cancel}
-          className="px-4 py-2 text-sm text-red-600 hover:bg-red-50 rounded-md transition-colors"
-        >
-          Cancel
-        </button>
+        {/* Hint */}
+        {points.length === 0 && (
+          <p className="text-xs text-gray-500 mt-2 text-center">
+            Tap anywhere on the map to place your first point
+          </p>
+        )}
+        {points.length > 0 && points.length < 3 && (
+          <p className="text-xs text-gray-500 mt-2 text-center">
+            Need at least 3 points to create a zone
+          </p>
+        )}
       </div>
     </div>
   );
