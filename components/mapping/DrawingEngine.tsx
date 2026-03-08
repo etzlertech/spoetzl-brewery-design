@@ -255,11 +255,10 @@ export default function DrawingEngine({
       });
     }
 
-    // Success - pass closed coordinates to parent (add first point at end)
-    const closedCoordinates = [...currentPoints, currentPoints[0]];
+    // Success - pass unclosed coordinates to parent (ZoneService will close them)
     console.log('Calling cleanup and onDrawingComplete');
     cleanup();
-    onDrawingComplete(closedCoordinates);
+    onDrawingComplete(currentPoints);
   }
 
   /**
