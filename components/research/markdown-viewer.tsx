@@ -11,12 +11,40 @@ interface MarkdownViewerProps {
 
 export function MarkdownViewer({ content }: MarkdownViewerProps) {
   return (
-    <div className="prose prose-lg max-w-none prose-headings:text-green-900 prose-h1:text-4xl prose-h2:text-3xl prose-h3:text-2xl prose-a:text-blue-600 prose-code:text-purple-700 prose-pre:bg-gray-800 prose-pre:text-gray-100 prose-img:rounded-lg prose-img:shadow-md prose-table:text-sm">
+    <article className="article-content">
       <ReactMarkdown
         remarkPlugins={[remarkGfm]}
         rehypePlugins={[rehypeRaw]}
         components={{
-          // Custom image handler to support relative paths
+          // Article-style headings
+          h1: ({ node, ...props }: any) => (
+            <h1 className="article-title" {...props} />
+          ),
+          h2: ({ node, ...props }: any) => (
+            <h2 className="article-heading-2" {...props} />
+          ),
+          h3: ({ node, ...props }: any) => (
+            <h3 className="article-heading-3" {...props} />
+          ),
+          // Paragraphs with better typography
+          p: ({ node, ...props }: any) => (
+            <p className="article-paragraph" {...props} />
+          ),
+          // Lists
+          ul: ({ node, ...props }: any) => (
+            <ul className="article-list" {...props} />
+          ),
+          ol: ({ node, ...props }: any) => (
+            <ol className="article-list-ordered" {...props} />
+          ),
+          li: ({ node, ...props }: any) => (
+            <li className="article-list-item" {...props} />
+          ),
+          // Blockquotes as pull quotes
+          blockquote: ({ node, ...props }: any) => (
+            <blockquote className="article-pullquote" {...props} />
+          ),
+          // Images
           img: ({ node, ...props }: any) => {
             const srcValue = typeof props.src === 'string' ? props.src : ''
             const src = srcValue.startsWith('/research/')
@@ -25,35 +53,65 @@ export function MarkdownViewer({ content }: MarkdownViewerProps) {
                 ? srcValue
                 : `/research/images/${srcValue}`
             return (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img {...props} src={src} alt={props.alt || ''} loading="lazy" />
+              <figure className="article-figure">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  {...props}
+                  src={src}
+                  alt={props.alt || ''}
+                  loading="lazy"
+                  className="article-image"
+                />
+                {props.alt && (
+                  <figcaption className="article-caption">{props.alt}</figcaption>
+                )}
+              </figure>
             )
           },
-          // Custom table styling
+          // Tables
           table: ({ node, ...props }: any) => (
-            <div className="overflow-x-auto my-6">
-              <table className="min-w-full divide-y divide-gray-300 border border-gray-300" {...props} />
+            <div className="article-table-wrapper">
+              <table className="article-table" {...props} />
             </div>
           ),
+          thead: ({ node, ...props }: any) => (
+            <thead className="article-table-head" {...props} />
+          ),
           th: ({ node, ...props }: any) => (
-            <th className="bg-green-50 px-4 py-3 text-left text-sm font-semibold text-green-900" {...props} />
+            <th className="article-table-header" {...props} />
           ),
           td: ({ node, ...props }: any) => (
-            <td className="px-4 py-3 text-sm text-gray-700 border-t border-gray-200" {...props} />
+            <td className="article-table-cell" {...props} />
           ),
-          // Custom code block styling
+          // Code
           code: ({ node, ...props }: any) => {
             const inline = props.inline
             if (inline) {
-              return <code className="bg-purple-50 px-1.5 py-0.5 rounded text-sm" {...props} />
+              return <code className="article-inline-code" {...props} />
             }
-            return <code {...props} />
+            return <code className="article-code-block" {...props} />
           },
+          // Links
+          a: ({ node, ...props }: any) => (
+            <a className="article-link" {...props} />
+          ),
+          // Strong/Bold text
+          strong: ({ node, ...props }: any) => (
+            <strong className="article-bold" {...props} />
+          ),
+          // Emphasis/Italic text
+          em: ({ node, ...props }: any) => (
+            <em className="article-italic" {...props} />
+          ),
+          // Horizontal rule
+          hr: ({ node, ...props }: any) => (
+            <hr className="article-divider" {...props} />
+          ),
         }}
       >
         {content}
       </ReactMarkdown>
-    </div>
+    </article>
   )
 }
 
@@ -89,17 +147,20 @@ export function MarkdownLoader({ filePath }: MarkdownLoaderProps) {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center py-12">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-600"></div>
+      <div className="flex items-center justify-center py-20">
+        <div className="space-y-4 text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-700 mx-auto"></div>
+          <p className="text-gray-600 font-medium">Loading article...</p>
+        </div>
       </div>
     )
   }
 
   if (error) {
     return (
-      <div className="rounded-lg bg-red-50 border border-red-200 p-6">
-        <h3 className="text-lg font-semibold text-red-900 mb-2">Error Loading Document</h3>
-        <p className="text-red-700">{error}</p>
+      <div className="mx-auto max-w-2xl rounded-2xl bg-red-50 border-l-4 border-red-500 p-8 my-12">
+        <h3 className="text-xl font-bold text-red-900 mb-3">Unable to Load Article</h3>
+        <p className="text-red-700 leading-relaxed">{error}</p>
       </div>
     )
   }

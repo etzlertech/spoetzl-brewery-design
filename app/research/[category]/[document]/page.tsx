@@ -2,7 +2,7 @@
 
 import Link from "next/link"
 import { useEffect, useState } from "react"
-import { useParams, useRouter } from "next/navigation"
+import { useParams } from "next/navigation"
 import { Navbar } from "@/components/layout/navbar"
 import { MarkdownLoader } from "@/components/research/markdown-viewer"
 
@@ -28,7 +28,6 @@ interface ResearchIndex {
 
 export default function ResearchDocumentPage() {
   const params = useParams()
-  const router = useRouter()
   const [researchData, setResearchData] = useState<ResearchIndex | null>(null)
   const [currentDoc, setCurrentDoc] = useState<Document | null>(null)
   const [currentCategory, setCurrentCategory] = useState<Category | null>(null)
@@ -41,7 +40,6 @@ export default function ResearchDocumentPage() {
         const data = await response.json()
         setResearchData(data)
 
-        // Find the current category and document
         const category = data.categories.find((cat: Category) => cat.id === params.category)
         if (category) {
           setCurrentCategory(category)
@@ -61,10 +59,13 @@ export default function ResearchDocumentPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-green-50 via-amber-50 to-green-100">
+      <div className="min-h-screen bg-white">
         <Navbar />
         <div className="flex items-center justify-center py-20">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-600"></div>
+          <div className="space-y-4 text-center">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-700 mx-auto"></div>
+            <p className="text-gray-600 font-medium">Loading article...</p>
+          </div>
         </div>
       </div>
     )
@@ -72,16 +73,16 @@ export default function ResearchDocumentPage() {
 
   if (!currentDoc || !currentCategory) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-green-50 via-amber-50 to-green-100">
+      <div className="min-h-screen bg-white">
         <Navbar />
-        <div className="mx-auto max-w-4xl px-4 py-20 text-center">
-          <h1 className="text-4xl font-bold text-red-600 mb-4">Document Not Found</h1>
-          <p className="text-gray-700 mb-8">
-            The research document you're looking for could not be found.
+        <div className="mx-auto max-w-3xl px-4 py-20 text-center">
+          <h1 className="text-5xl font-bold text-gray-900 mb-6">Article Not Found</h1>
+          <p className="text-xl text-gray-600 mb-10">
+            The article you're looking for could not be found.
           </p>
           <Link
             href="/research"
-            className="inline-block rounded-lg bg-green-600 px-6 py-3 font-semibold text-white hover:bg-green-700"
+            className="inline-block rounded-full bg-green-700 px-8 py-4 font-semibold text-white hover:bg-green-800 transition"
           >
             Back to Research Center
           </Link>
@@ -90,86 +91,106 @@ export default function ResearchDocumentPage() {
     )
   }
 
-  // Get other documents in the same category
   const otherDocs = currentCategory.documents.filter(doc => doc.id !== currentDoc.id)
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-green-50 via-amber-50 to-green-100">
+    <div className="min-h-screen bg-white">
       <Navbar />
 
-      <main className="mx-auto max-w-5xl px-4 py-8 sm:px-6 lg:px-8">
-        {/* Breadcrumb */}
-        <nav className="mb-6 flex items-center gap-2 text-sm">
-          <Link href="/research" className="text-green-600 hover:text-green-700 font-medium">
-            Research Center
-          </Link>
-          <span className="text-gray-400">/</span>
-          <Link
-            href="/research"
-            className="text-green-600 hover:text-green-700 font-medium"
-          >
-            {currentCategory.title}
-          </Link>
-          <span className="text-gray-400">/</span>
-          <span className="text-gray-700">{currentDoc.title}</span>
-        </nav>
+      {/* Article Header Section */}
+      <header className="border-b border-gray-200 bg-gradient-to-b from-gray-50 to-white">
+        <div className="mx-auto max-w-4xl px-6 py-12 lg:px-8">
+          {/* Breadcrumb */}
+          <nav className="mb-8 flex items-center gap-2 text-sm">
+            <Link href="/research" className="text-green-700 hover:text-green-800 font-medium transition">
+              Research
+            </Link>
+            <span className="text-gray-300">/</span>
+            <Link href="/research" className="text-green-700 hover:text-green-800 font-medium transition">
+              {currentCategory.title}
+            </Link>
+          </nav>
 
-        {/* Document Header */}
-        <div className="mb-8 rounded-xl bg-white p-8 shadow-lg">
-          <div className="mb-4 flex items-center gap-3">
-            <span className="text-4xl">{currentCategory.icon}</span>
-            <div>
-              <p className="text-sm font-medium text-gray-600">{currentCategory.title}</p>
-              <h1 className="text-3xl font-bold text-green-900">{currentDoc.title}</h1>
-            </div>
+          {/* Category Badge */}
+          <div className="mb-6 inline-flex items-center gap-2 rounded-full bg-green-100 px-4 py-2">
+            <span className="text-2xl">{currentCategory.icon}</span>
+            <span className="text-sm font-semibold text-green-800 uppercase tracking-wide">
+              {currentCategory.title}
+            </span>
           </div>
-          <p className="text-gray-700">{currentDoc.description}</p>
-        </div>
 
-        {/* Document Content */}
-        <div className="mb-8 rounded-xl bg-white p-8 shadow-lg">
-          <MarkdownLoader filePath={currentDoc.file} />
-        </div>
+          {/* Article Title */}
+          <h1 className="text-5xl md:text-6xl font-bold text-gray-900 mb-6 leading-tight">
+            {currentDoc.title}
+          </h1>
 
-        {/* Related Documents */}
-        {otherDocs.length > 0 && (
-          <div className="mb-8 rounded-xl bg-white p-8 shadow-lg">
-            <h2 className="mb-4 text-2xl font-bold text-green-900">
+          {/* Article Description */}
+          <p className="text-xl md:text-2xl text-gray-600 leading-relaxed">
+            {currentDoc.description}
+          </p>
+
+          {/* Metadata */}
+          <div className="mt-8 flex items-center gap-4 text-sm text-gray-500">
+            <time>March 2026</time>
+            <span>·</span>
+            <span>Research Article</span>
+          </div>
+        </div>
+      </header>
+
+      {/* Article Content */}
+      <main className="mx-auto max-w-4xl px-6 py-16 lg:px-8">
+        <MarkdownLoader filePath={currentDoc.file} />
+      </main>
+
+      {/* Related Articles Section */}
+      {otherDocs.length > 0 && (
+        <section className="border-t border-gray-200 bg-gray-50 py-16">
+          <div className="mx-auto max-w-4xl px-6 lg:px-8">
+            <h2 className="text-3xl font-bold text-gray-900 mb-8">
               More in {currentCategory.title}
             </h2>
-            <div className="grid gap-4 md:grid-cols-2">
+            <div className="grid gap-6 md:grid-cols-2">
               {otherDocs.map((doc) => (
                 <Link
                   key={doc.id}
                   href={`/research/${currentCategory.id}/${doc.id}`}
-                  className="group rounded-lg border-2 border-gray-200 p-4 transition hover:border-green-500 hover:shadow-md"
+                  className="group rounded-2xl border border-gray-200 bg-white p-6 transition hover:border-green-500 hover:shadow-lg"
                 >
-                  <h3 className="font-semibold text-green-900 group-hover:text-green-600">
+                  <h3 className="text-xl font-bold text-gray-900 mb-3 group-hover:text-green-700 transition">
                     {doc.title}
                   </h3>
-                  <p className="mt-2 text-sm text-gray-600">{doc.description}</p>
+                  <p className="text-gray-600 leading-relaxed">{doc.description}</p>
+                  <div className="mt-4 flex items-center text-green-700 font-semibold text-sm">
+                    Read article
+                    <svg className="ml-2 h-4 w-4 transition group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                    </svg>
+                  </div>
                 </Link>
               ))}
             </div>
           </div>
-        )}
+        </section>
+      )}
 
-        {/* Navigation Buttons */}
-        <div className="flex gap-4">
+      {/* Bottom Navigation */}
+      <div className="border-t border-gray-200 py-8">
+        <div className="mx-auto max-w-4xl px-6 lg:px-8 flex gap-4">
           <Link
             href="/research"
-            className="flex-1 rounded-lg border-2 border-green-600 px-6 py-3 text-center font-semibold text-green-600 transition hover:bg-green-50"
+            className="flex-1 rounded-full border-2 border-gray-300 px-6 py-3 text-center font-semibold text-gray-700 transition hover:border-green-600 hover:text-green-700"
           >
-            ← Back to Research Center
+            ← Research Center
           </Link>
           <Link
             href="/dashboard"
-            className="flex-1 rounded-lg bg-green-600 px-6 py-3 text-center font-semibold text-white transition hover:bg-green-700"
+            className="flex-1 rounded-full bg-green-700 px-6 py-3 text-center font-semibold text-white transition hover:bg-green-800"
           >
-            Go to Dashboard
+            Dashboard
           </Link>
         </div>
-      </main>
+      </div>
     </div>
   )
 }
