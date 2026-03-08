@@ -33,6 +33,7 @@ interface ResearchIndex {
 export default function ResearchCenterPage() {
   const [researchData, setResearchData] = useState<ResearchIndex | null>(null)
   const [loading, setLoading] = useState(true)
+  const [showTOC, setShowTOC] = useState(false)
 
   useEffect(() => {
     async function loadResearchIndex() {
@@ -63,24 +64,90 @@ export default function ResearchCenterPage() {
     )
   }
 
+  const totalArticles = researchData?.categories.reduce((sum, cat) => sum + cat.articles.length, 0) || 0
+
   return (
     <div className="min-h-screen bg-white">
       <Navbar />
 
       {/* Header - Mobile Optimized */}
-      <header className="border-b border-gray-200 bg-white sticky top-0 z-10">
+      <header className="border-b border-gray-200 bg-white sticky top-0 z-20">
         <div className="mx-auto max-w-6xl px-4 py-4 sm:px-6">
-          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">Research</h1>
-          <p className="mt-1 text-sm text-gray-600">
-            Expert insights on landscape design
-          </p>
+          <div className="flex items-center justify-between">
+            <div>
+              <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">Research</h1>
+              <p className="mt-1 text-xs sm:text-sm text-gray-600">
+                {totalArticles} expert articles on landscape design
+              </p>
+            </div>
+            <button
+              onClick={() => setShowTOC(!showTOC)}
+              className="flex items-center gap-2 rounded-full bg-gray-100 px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-200 transition active:scale-95"
+            >
+              <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+              </svg>
+              <span className="hidden sm:inline">Contents</span>
+            </button>
+          </div>
         </div>
       </header>
+
+      {/* Table of Contents Drawer */}
+      {showTOC && (
+        <div className="fixed inset-0 z-30 bg-black/20" onClick={() => setShowTOC(false)}>
+          <div
+            className="absolute top-0 right-0 h-full w-full max-w-md bg-white shadow-2xl overflow-y-auto"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="sticky top-0 bg-white border-b border-gray-200 px-4 py-4 flex items-center justify-between">
+              <h2 className="text-lg font-bold text-gray-900">Table of Contents</h2>
+              <button
+                onClick={() => setShowTOC(false)}
+                className="rounded-full p-2 hover:bg-gray-100 transition"
+              >
+                <svg className="h-5 w-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+
+            <nav className="p-4 space-y-6">
+              {researchData?.categories.map((category) => (
+                <div key={category.id}>
+                  <div className="flex items-center gap-2 mb-3">
+                    <span className="text-xl">{category.icon}</span>
+                    <h3 className="text-sm font-bold text-gray-900 uppercase tracking-wide">
+                      {category.title}
+                    </h3>
+                  </div>
+                  <ul className="space-y-2 ml-7">
+                    {category.articles.map((article, index) => (
+                      <li key={article.id}>
+                        <Link
+                          href={`/research/${category.id}/${article.id}`}
+                          onClick={() => setShowTOC(false)}
+                          className="block py-2 text-sm text-gray-700 hover:text-green-700 font-medium transition"
+                        >
+                          <span className="text-gray-400 font-mono text-xs mr-2">
+                            {(index + 1).toString().padStart(2, '0')}
+                          </span>
+                          {article.title}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
+            </nav>
+          </div>
+        </div>
+      )}
 
       <main className="mx-auto max-w-6xl px-4 py-6 sm:px-6">
         {/* Categories as Sections */}
         {researchData?.categories.map((category, categoryIndex) => (
-          <section key={category.id} className={categoryIndex > 0 ? "mt-10" : ""}>
+          <section key={category.id} id={category.id} className={categoryIndex > 0 ? "mt-10" : ""}>
             {/* Section Header */}
             <div className="mb-4 flex items-center justify-between">
               <div className="flex items-center gap-2">
