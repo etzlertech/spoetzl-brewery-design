@@ -1134,10 +1134,9 @@ Busch Gardens Williamsburg creates environment where all guests feel welcome and
 
 ### Complete Visual Assets Documentation
 
-For comprehensive list of 150+ visual asset URLs organized by category, see:
-**`visual-assets-urls.md`** in research folder
+A comprehensive visual reference library with 150+ curated images and videos is available in the research collection.
 
-Categories include:
+The library includes:
 - Official sources and press kits
 - Stock photography platforms
 - Video tours and POV footage
@@ -1430,16 +1429,14 @@ The park proves that landscape design in themed entertainment environments can a
 
 ---
 
-## Additional Research Documentation
+## Research Sources
 
-This skill file synthesizes research from four comprehensive documents:
+This comprehensive design analysis synthesizes insights from multiple in-depth research documents covering:
 
-1. **landscape-design-research.md** - Landscape design philosophy and horticultural practices
-2. **visitor-experience-research.md** - Visitor experience architecture and guest flow design
-3. **themed-areas-research.md** - Themed area design characteristics and integration strategies
-4. **visual-assets-urls.md** - 150+ visual reference URLs organized by category
-
-All source documents are located in the **Busch-Gardens-Williamsburg-Research** folder.
+1. **Landscape design philosophy** and horticultural excellence
+2. **Visitor experience architecture** and guest flow patterns
+3. **Themed environment design** across 10 European villages
+4. **Visual reference library** with 150+ professional images and videos
 
 ---
 

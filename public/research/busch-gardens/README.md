@@ -11,39 +11,15 @@ Busch Gardens Williamsburg has been named "World's Most Beautiful Theme Park" fo
 
 ---
 
-## Research Documents
+## What You'll Find in This Research
 
-### Main Reference
+This research collection explores how Busch Gardens Williamsburg creates and maintains landscape design excellence at a scale and intensity unmatched in the industry. The articles examine:
 
-**`busch-gardens-landscape-design.md`** - Comprehensive synthesis (52KB)
-- Complete design analysis and key principles
-- Themed area details and integration strategies
-- Actionable design checklist
-
-### Detailed Research
-
-1. **`landscape-design-research.md`** (15KB)
-   - Landscape design philosophy and approach
-   - Horticulture and plant selection strategies
-   - Topography integration and water features
-   - Seasonal planting programs and sustainability
-
-2. **`visitor-experience-research.md`** (25KB)
-   - Park layout and circulation patterns
-   - Wayfinding and signage systems
-   - Sightlines and visual progression
-   - Queue design and accessibility
-
-3. **`themed-areas-research.md`** (41KB)
-   - Detailed analysis of all 10 European hamlets
-   - Architecture and landscape treatments by theme
-   - Storytelling through environmental design
-   - Attraction integration within themed environments
-
-4. **`visual-assets-urls.md`** (23KB)
-   - 150+ curated image and video references
-   - Professional photography collections
-   - Official sources and press kits
+- **Design philosophy** that creates landscapes compelling enough to compete with roller coasters
+- **Horticultural strategies** for maintaining 30,000+ plants through 6 seasonal rotations
+- **Visitor experience architecture** including circulation, wayfinding, and multi-sensory immersion
+- **Themed area design** across 10 authentic European villages
+- **Visual references** with 150+ curated professional images and videos
 
 ---
 
@@ -134,26 +110,26 @@ Busch Gardens Williamsburg has been named "World's Most Beautiful Theme Park" fo
 
 ---
 
-## How to Use This Research
+## How to Apply These Principles
 
 ### For Landscape Design Projects
 
-1. **Start with:** `busch-gardens-landscape-design.md` for comprehensive overview
-2. **Reference:** Design Principles Checklist (at end of main file)
-3. **Deep dive:** Specific research files for detailed information on particular topics
-4. **Visualize:** `visual-assets-urls.md` for image and video references
+1. **Start with:** The comprehensive design analysis for key principles and strategies
+2. **Reference:** The 10 design principles listed above as your framework
+3. **Deep dive:** Explore themed area integration and multi-sensory design techniques
+4. **Visualize:** Browse the visual reference library for inspiration
 
 ### For Themed Environment Design
 
-1. **Study:** Themed Areas research for integration strategies
-2. **Apply:** Multi-sensory immersion principles
-3. **Implement:** Transition design techniques (bridges, audio zones, sightline management)
+1. **Study:** European hamlet integration strategies across 10 distinct areas
+2. **Apply:** Multi-sensory immersion principles (visual, auditory, olfactory, tactile)
+3. **Implement:** Transition design techniques using bridges, audio zones, and sightline management
 
 ### For Horticultural Planning
 
-1. **Review:** Seasonal planting programs (6 rotations per year)
-2. **Consider:** In-house production model (17,000 sq ft greenhouse)
-3. **Adopt:** Integrated pest management with beneficial insects
+1. **Review:** Seasonal planting programs with multiple rotations per year
+2. **Consider:** In-house production models for consistency and control
+3. **Adopt:** Integrated pest management and sustainable practices
 
 ---
 
