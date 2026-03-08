@@ -3,23 +3,25 @@ import { readFileSync, readdirSync } from 'fs'
 import { join, basename } from 'path'
 import { fileURLToPath } from 'url'
 import { dirname } from 'path'
+import dotenv from 'dotenv'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
 
+// Load environment variables from .env file
+dotenv.config({ path: join(__dirname, '..', '.env') })
+
 // Supabase configuration
 const supabaseUrl = 'https://armklbqsjcmrhqljmacz.supabase.co'
-const supabaseAnonKey = process.env.SUPABASE_ANON_KEY || ''
+// Use service role key to bypass RLS for uploads
+const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY ||
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ||
+  process.env.SUPABASE_ANON_KEY ||
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFybWtsYnFzamNtcmhxbGptYWN6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI5MjIxMDMsImV4cCI6MjA4ODQ5ODEwM30.0Lco8yeUN6PdQxHbcxP3N1JKrGAI2lOA04Pzrqt7v40'
 
-if (!supabaseAnonKey) {
-  console.error('Error: SUPABASE_ANON_KEY environment variable is required')
-  console.log('Usage: SUPABASE_ANON_KEY=your-key node scripts/upload-images-to-supabase.mjs')
-  process.exit(1)
-}
+const supabase = createClient(supabaseUrl, supabaseKey)
 
-const supabase = createClient(supabaseUrl, supabaseAnonKey)
-
-// Path to images
+// Path to images - go up to parent directory of spoetzl-brewery-app
 const imagesDir = join(__dirname, '..', '..', 'Busch-Gardens-Williamsburg-Research', 'images')
 
 async function uploadImages() {
