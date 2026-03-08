@@ -235,12 +235,8 @@ export default function DrawingEngine({
       return;
     }
 
-    // Close the polygon (add first point at end)
-    const closedCoordinates = [...currentPoints, currentPoints[0]];
-    console.log('Closed coordinates:', closedCoordinates);
-
-    // Validate with ZoneService
-    const validation = ZoneService.validatePolygon(closedCoordinates);
+    // Validate with ZoneService (don't close - ZoneService will handle that)
+    const validation = ZoneService.validatePolygon(currentPoints);
     console.log('Validation result:', validation);
 
     if (!validation.isValid) {
@@ -259,7 +255,8 @@ export default function DrawingEngine({
       });
     }
 
-    // Success - pass coordinates to parent
+    // Success - pass closed coordinates to parent (add first point at end)
+    const closedCoordinates = [...currentPoints, currentPoints[0]];
     console.log('Calling cleanup and onDrawingComplete');
     cleanup();
     onDrawingComplete(closedCoordinates);
