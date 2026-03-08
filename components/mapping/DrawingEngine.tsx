@@ -293,7 +293,12 @@ export default function DrawingEngine({
   if (!isActive) return null;
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 md:absolute md:bottom-8 md:left-1/2 md:-translate-x-1/2 md:right-auto z-[1000] bg-white md:rounded-lg shadow-lg border-t md:border border-gray-200 pb-safe">
+    <div
+      className="fixed bottom-0 left-0 right-0 md:absolute md:bottom-8 md:left-1/2 md:-translate-x-1/2 md:right-auto z-[1000] bg-white md:rounded-lg shadow-lg border-t md:border border-gray-200 pb-safe"
+      onClick={(e) => {
+        e.stopPropagation();
+      }}
+    >
       {/* Mobile-first controls */}
       <div className="p-4">
         {/* Status */}
@@ -314,7 +319,9 @@ export default function DrawingEngine({
           {/* Undo Last Point */}
           {points.length > 0 && (
             <button
-              onClick={() => {
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
                 setPoints(currentPoints => {
                   const newPoints = currentPoints.slice(0, -1);
                   const lastMarker = pointMarkersRef.current.pop();
@@ -324,7 +331,7 @@ export default function DrawingEngine({
                   return newPoints;
                 });
               }}
-              className="flex-1 px-4 py-3 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors font-medium text-sm flex items-center justify-center gap-2"
+              className="flex-1 px-4 py-3 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors font-medium text-sm flex items-center justify-center gap-2 active:scale-95"
             >
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2M3 12l6.414 6.414a2 2 0 001.414.586H19a2 2 0 002-2V7a2 2 0 00-2-2h-8.172a2 2 0 00-1.414.586L3 12z" />
@@ -333,23 +340,31 @@ export default function DrawingEngine({
             </button>
           )}
 
-          {/* Complete Zone */}
+          {/* Complete Zone - Prominent DONE button */}
           {points.length >= 3 && (
             <button
-              onClick={completePolygon}
-              className="flex-1 px-4 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium text-sm flex items-center justify-center gap-2"
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                completePolygon();
+              }}
+              className="flex-1 px-4 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors font-semibold text-base flex items-center justify-center gap-2 shadow-lg active:scale-95"
             >
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
               </svg>
-              Complete Zone
+              DONE - Close Shape
             </button>
           )}
 
           {/* Cancel */}
           <button
-            onClick={cancel}
-            className="px-4 py-3 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition-colors font-medium text-sm flex items-center justify-center gap-2"
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              cancel();
+            }}
+            className="px-4 py-3 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition-colors font-medium text-sm flex items-center justify-center gap-2 active:scale-95"
           >
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
