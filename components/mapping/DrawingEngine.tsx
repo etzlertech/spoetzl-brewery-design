@@ -293,7 +293,7 @@ export default function DrawingEngine({
   if (!isActive) return null;
 
   return (
-    <div className="fixed bottom-4 left-4 right-4 md:absolute md:bottom-8 md:left-1/2 md:-translate-x-1/2 md:right-auto z-[1000] bg-white rounded-lg shadow-lg border border-gray-200">
+    <div className="fixed bottom-0 left-0 right-0 md:absolute md:bottom-8 md:left-1/2 md:-translate-x-1/2 md:right-auto z-[1000] bg-white md:rounded-lg shadow-lg border-t md:border border-gray-200 pb-safe">
       {/* Mobile-first controls */}
       <div className="p-4">
         {/* Status */}

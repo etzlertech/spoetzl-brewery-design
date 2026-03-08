@@ -378,8 +378,8 @@ export default function MappingPage() {
   // Show main application
   return (
     <div className="w-full h-screen flex flex-col">
-      {/* Header */}
-      <header className="bg-white border-b border-gray-200 px-6 py-4">
+      {/* Header - Hidden on mobile, visible on desktop */}
+      <header className="hidden md:block bg-white border-b border-gray-200 px-6 py-4">
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-2xl font-bold text-gray-900">
@@ -420,6 +420,28 @@ export default function MappingPage() {
           property={property}
           onMapReady={handleMapReady}
         />
+
+        {/* Mobile Floating Action Buttons */}
+        <div className="md:hidden fixed top-4 right-4 z-[900] flex flex-col gap-2">
+          <button
+            onClick={() => setShowImagePanel(!showImagePanel)}
+            className="w-14 h-14 bg-green-600 text-white rounded-full shadow-lg hover:bg-green-700 transition-colors flex items-center justify-center active:scale-95"
+            aria-label="Upload Images"
+          >
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+            </svg>
+          </button>
+          <button
+            onClick={() => setShowExportModal(true)}
+            className="w-14 h-14 bg-blue-600 text-white rounded-full shadow-lg hover:bg-blue-700 transition-colors flex items-center justify-center active:scale-95"
+            aria-label="Export Data"
+          >
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+            </svg>
+          </button>
+        </div>
 
         {/* Toolbar */}
         {mapping && (
@@ -587,8 +609,8 @@ export default function MappingPage() {
         )}
       </main>
 
-      {/* Footer Info Bar */}
-      <footer className="bg-gray-800 text-white px-6 py-2 text-sm">
+      {/* Footer Info Bar - Hidden on mobile */}
+      <footer className="hidden md:block bg-gray-800 text-white px-6 py-2 text-sm">
         <p>
           Interactive Property Mapping Feature • Design System v2.0 •
           WGS84 Coordinate System

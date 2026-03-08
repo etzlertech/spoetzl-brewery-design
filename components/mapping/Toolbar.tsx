@@ -100,8 +100,31 @@ export default function Toolbar({
   ];
 
   return (
-    <div className="absolute top-4 left-4 z-[1000] bg-white rounded-lg shadow-lg border border-gray-200">
-      <div className="flex items-center gap-2 p-2">
+    <>
+      {/* Mobile Mode Switcher - Bottom Left FAB */}
+      <div className="md:hidden fixed bottom-24 left-4 z-[900] flex flex-col gap-2">
+        {modes.map((mode) => (
+          <button
+            key={mode.id}
+            onClick={() => onModeChange(mode.id)}
+            className={`
+              w-14 h-14 rounded-full shadow-lg transition-all flex items-center justify-center
+              ${currentMode === mode.id
+                ? 'bg-blue-600 text-white scale-110'
+                : 'bg-white text-gray-700 active:scale-95'
+              }
+            `}
+            title={mode.description}
+            aria-label={mode.label}
+          >
+            {mode.icon}
+          </button>
+        ))}
+      </div>
+
+      {/* Desktop Toolbar */}
+      <div className="hidden md:block absolute top-4 left-4 z-[1000] bg-white rounded-lg shadow-lg border border-gray-200">
+        <div className="flex items-center gap-2 p-2">
         {/* Mode Switcher */}
         <div className="flex items-center gap-1 pr-2 border-r border-gray-200">
           {modes.map((mode) => (
@@ -178,12 +201,13 @@ export default function Toolbar({
         </div>
       </div>
 
-      {/* Current Mode Description */}
-      <div className="px-4 py-2 bg-gray-50 border-t border-gray-200 rounded-b-lg">
-        <p className="text-xs text-gray-600">
-          {modes.find(m => m.id === currentMode)?.description}
-        </p>
+        {/* Current Mode Description */}
+        <div className="px-4 py-2 bg-gray-50 border-t border-gray-200 rounded-b-lg">
+          <p className="text-xs text-gray-600">
+            {modes.find(m => m.id === currentMode)?.description}
+          </p>
+        </div>
       </div>
-    </div>
+    </>
   );
 }
