@@ -43,6 +43,7 @@ export default function LayerPanel({
   onLayerToggleVisibility,
   zoneCountByLayer
 }: LayerPanelProps) {
+  const [isOpen, setIsOpen] = useState(false);
   const [isCreatingLayer, setIsCreatingLayer] = useState(false);
   const [newLayerName, setNewLayerName] = useState('');
   const [editingLayerId, setEditingLayerId] = useState<string | null>(null);
@@ -72,25 +73,62 @@ export default function LayerPanel({
   }
 
   return (
-    <div className="absolute top-4 right-4 z-[1000] w-80 bg-white rounded-lg shadow-lg border border-gray-200 max-h-[calc(100vh-120px)] flex flex-col">
-      {/* Header */}
-      <div className="p-4 border-b border-gray-200">
-        <div className="flex items-center justify-between mb-2">
-          <h2 className="text-lg font-bold text-gray-900">Layers</h2>
-          <button
-            onClick={() => setIsCreatingLayer(true)}
-            className="p-1.5 text-blue-600 hover:bg-blue-50 rounded-md transition-colors"
-            title="Create new layer"
+    <>
+      {/* Toggle Button (Mobile & Desktop) */}
+      <button
+        onClick={() => setIsOpen(!isOpen)}
+        className="fixed bottom-4 right-4 z-[1000] md:bottom-auto md:top-4 md:right-4 bg-white p-3 rounded-full shadow-lg border border-gray-200 hover:bg-gray-50 transition-all"
+        title="Layers"
+      >
+        <svg className="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+        </svg>
+        {layers.length > 0 && (
+          <span className="absolute -top-1 -right-1 bg-blue-600 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
+            {layers.length}
+          </span>
+        )}
+      </button>
+
+      {/* Layer Panel Modal */}
+      {isOpen && (
+        <div
+          className="fixed inset-0 z-[999] bg-black bg-opacity-50 md:bg-transparent md:pointer-events-none"
+          onClick={() => setIsOpen(false)}
+        >
+          <div
+            className="fixed bottom-0 left-0 right-0 md:absolute md:bottom-auto md:top-4 md:right-4 md:left-auto z-[1000] w-full md:w-80 bg-white rounded-t-2xl md:rounded-lg shadow-lg border border-gray-200 max-h-[80vh] md:max-h-[calc(100vh-120px)] flex flex-col pointer-events-auto"
+            onClick={(e) => e.stopPropagation()}
           >
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-            </svg>
-          </button>
-        </div>
-        <p className="text-xs text-gray-600">
-          Organize zones into layers for better management
-        </p>
-      </div>
+            {/* Header */}
+            <div className="p-4 border-b border-gray-200">
+              <div className="flex items-center justify-between mb-2">
+                <h2 className="text-lg font-bold text-gray-900">Layers</h2>
+                <div className="flex items-center gap-2">
+                  <button
+                    onClick={() => setIsCreatingLayer(true)}
+                    className="p-1.5 text-blue-600 hover:bg-blue-50 rounded-md transition-colors"
+                    title="Create new layer"
+                  >
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                    </svg>
+                  </button>
+                  <button
+                    onClick={() => setIsOpen(false)}
+                    className="p-1.5 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-md transition-colors md:hidden"
+                    title="Close"
+                  >
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                  </button>
+                </div>
+              </div>
+              <p className="text-xs text-gray-600">
+                Organize zones into layers for better management
+              </p>
+            </div>
 
       {/* New Layer Form */}
       {isCreatingLayer && (
@@ -237,6 +275,9 @@ export default function LayerPanel({
           </div>
         )}
       </div>
-    </div>
+          </div>
+        </div>
+      )}
+    </>
   );
 }
