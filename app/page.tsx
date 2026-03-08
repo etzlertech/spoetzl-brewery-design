@@ -18,16 +18,10 @@ export default function Home() {
             </p>
             <div className="mt-10 flex items-center justify-center gap-4">
               <Link
-                href="/dashboard"
+                href="/research"
                 className="rounded-lg bg-gradient-to-r from-green-700 to-green-600 px-8 py-4 text-lg font-semibold text-white shadow-lg transition hover:from-green-800 hover:to-green-700"
               >
-                Get Started
-              </Link>
-              <Link
-                href="/busch-gardens"
-                className="rounded-lg border-2 border-amber-600 bg-white px-8 py-4 text-lg font-semibold text-amber-700 shadow-lg transition hover:bg-amber-50"
-              >
-                View Inspiration
+                Busch Gardens Research
               </Link>
             </div>
           </div>
