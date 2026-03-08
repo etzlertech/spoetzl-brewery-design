@@ -1,0 +1,106 @@
+import { NextRequest, NextResponse } from 'next/server';
+import { createClient } from '@supabase/supabase-js';
+
+// Server-side Supabase client with service role key (bypasses RLS)
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://armklbqsjcmrhqljmacz.supabase.co';
+const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
+
+if (!supabaseServiceKey) {
+  throw new Error('SUPABASE_SERVICE_ROLE_KEY is not configured in environment variables');
+}
+
+const supabase = createClient(supabaseUrl, supabaseServiceKey);
+
+// Constants
+const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
+const ALLOWED_TYPES = ['image/jpeg', 'image/png', 'image/webp'];
+const ALLOWED_EXTENSIONS = ['jpg', 'jpeg', 'png', 'webp'];
+
+/**
+ * POST /api/camera-capture
+ * Uploads an image from camera/gallery to Supabase storage
+ *
+ * Request: FormData with 'image' file
+ * Response: { url: string } or { error: string }
+ */
+export async function POST(request: NextRequest) {
+  try {
+    // Parse FormData
+    const formData = await request.formData();
+    const file = formData.get('image') as File | null;
+
+    if (!file) {
+      return NextResponse.json(
+        { error: 'No image file provided' },
+        { status: 400 }
+      );
+    }
+
+    // Validate file type
+    if (!ALLOWED_TYPES.includes(file.type)) {
+      return NextResponse.json(
+        { error: 'Invalid file type. Please upload a JPEG, PNG, or WebP image.' },
+        { status: 400 }
+      );
+    }
+
+    // Validate file size
+    if (file.size > MAX_FILE_SIZE) {
+      return NextResponse.json(
+        { error: `File too large (${(file.size / 1024 / 1024).toFixed(1)}MB). Maximum size is 10MB.` },
+        { status: 400 }
+      );
+    }
+
+    // Extract file extension
+    const fileExt = file.name.split('.').pop()?.toLowerCase();
+    if (!fileExt || !ALLOWED_EXTENSIONS.includes(fileExt)) {
+      return NextResponse.json(
+        { error: 'Invalid file extension' },
+        { status: 400 }
+      );
+    }
+
+    // Generate unique filename: capture-{timestamp}-{uuid}.{ext}
+    const timestamp = Date.now();
+    const uuid = crypto.randomUUID();
+    const filename = `capture-${timestamp}-${uuid}.${fileExt}`;
+    const storagePath = `camera-captures/${filename}`;
+
+    // Convert File to ArrayBuffer
+    const arrayBuffer = await file.arrayBuffer();
+    const buffer = new Uint8Array(arrayBuffer);
+
+    // Upload to Supabase storage
+    const { data, error } = await supabase.storage
+      .from('images')
+      .upload(storagePath, buffer, {
+        contentType: file.type,
+        upsert: false,
+      });
+
+    if (error) {
+      console.error('Supabase upload error:', error);
+      return NextResponse.json(
+        { error: `Upload failed: ${error.message}` },
+        { status: 500 }
+      );
+    }
+
+    // Get public URL
+    const { data: { publicUrl } } = supabase.storage
+      .from('images')
+      .getPublicUrl(storagePath);
+
+    console.log(`Camera capture uploaded: ${filename} (${(file.size / 1024).toFixed(1)}KB)`);
+
+    return NextResponse.json({ url: publicUrl }, { status: 200 });
+
+  } catch (error) {
+    console.error('Camera capture API error:', error);
+    return NextResponse.json(
+      { error: 'Internal server error' },
+      { status: 500 }
+    );
+  }
+}

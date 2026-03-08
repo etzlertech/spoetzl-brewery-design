@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Providers } from "@/components/layout/providers";
+import ToastNotification from "@/components/ui/ToastNotification";
+import CameraUI from "@/components/camera/CameraUI";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -31,6 +33,8 @@ export default function RootLayout({
       >
         <Providers>
           {children}
+          <ToastNotification />
+          <CameraUI />
         </Providers>
       </body>
     </html>
