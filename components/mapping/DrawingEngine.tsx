@@ -131,6 +131,12 @@ export default function DrawingEngine({
    * Handle map click - add point or complete polygon
    */
   function handleMapClick(e: L.LeafletMouseEvent) {
+    // Ignore clicks on UI controls (buttons, panels, etc.)
+    const target = e.originalEvent.target as HTMLElement;
+    if (target.closest('button') || target.closest('[role="button"]') || target.closest('.drawing-controls')) {
+      return;
+    }
+
     const clickedPoint: LonLatTuple = [e.latlng.lng, e.latlng.lat];
 
     setPoints(currentPoints => {
@@ -294,7 +300,7 @@ export default function DrawingEngine({
 
   return (
     <div
-      className="fixed bottom-0 left-0 right-0 md:absolute md:bottom-8 md:left-1/2 md:-translate-x-1/2 md:right-auto z-[1000] bg-white md:rounded-lg shadow-lg border-t md:border border-gray-200 pb-safe"
+      className="drawing-controls fixed bottom-0 left-0 right-0 md:absolute md:bottom-8 md:left-1/2 md:-translate-x-1/2 md:right-auto z-[1000] bg-white md:rounded-lg shadow-lg border-t md:border border-gray-200 pb-safe"
       onClick={(e) => {
         e.stopPropagation();
       }}
