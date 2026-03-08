@@ -225,8 +225,10 @@ export default function DrawingEngine({
    * Complete polygon and validate
    */
   function completePolygon() {
+    console.log('completePolygon called');
     // Use ref to get current points value
     const currentPoints = pointsRef.current;
+    console.log('Current points:', currentPoints.length);
 
     if (currentPoints.length < 3) {
       ErrorService.showToast('A polygon requires at least 3 points', 'error');
@@ -235,9 +237,11 @@ export default function DrawingEngine({
 
     // Close the polygon (add first point at end)
     const closedCoordinates = [...currentPoints, currentPoints[0]];
+    console.log('Closed coordinates:', closedCoordinates);
 
     // Validate with ZoneService
     const validation = ZoneService.validatePolygon(closedCoordinates);
+    console.log('Validation result:', validation);
 
     if (!validation.isValid) {
       ErrorService.showToast(
@@ -256,6 +260,7 @@ export default function DrawingEngine({
     }
 
     // Success - pass coordinates to parent
+    console.log('Calling cleanup and onDrawingComplete');
     cleanup();
     onDrawingComplete(closedCoordinates);
   }
@@ -349,7 +354,9 @@ export default function DrawingEngine({
           {/* Complete Zone - Prominent DONE button */}
           {points.length >= 3 && (
             <button
+              type="button"
               onClick={(e) => {
+                console.log('DONE button clicked!');
                 e.preventDefault();
                 e.stopPropagation();
                 completePolygon();
