@@ -161,8 +161,11 @@ export default function MappingPage() {
    * Handle zone form submit
    */
   function handleZoneFormSubmit(data: ZoneFormData) {
+    console.log('handleZoneFormSubmit called with:', data);
+    console.log('Drawing coordinates:', drawingCoordinates?.length);
+
     if (mapping && drawingCoordinates) {
-      mapping.createZone(
+      const zone = mapping.createZone(
         data.name,
         drawingCoordinates,
         data.fillColor,
@@ -170,9 +173,13 @@ export default function MappingPage() {
         data.description
       );
 
+      console.log('Zone created:', zone);
+
       setShowZoneForm(false);
       setDrawingCoordinates(null);
       mapping.setMode('view');
+
+      console.log('Current zones count:', mapping.zones.length);
     }
   }
 

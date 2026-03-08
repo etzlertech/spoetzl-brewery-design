@@ -48,11 +48,15 @@ export default function ZoneRenderer({
   useEffect(() => {
     if (!map) return;
 
+    console.log('ZoneRenderer: Rendering', zones.length, 'zones');
+
     // Create layer lookup for visibility
     const layerVisibilityMap = layers.reduce((acc, layer) => {
       acc[layer.id] = layer.visible;
       return acc;
     }, {} as Record<string, boolean>);
+
+    console.log('Layer visibility map:', layerVisibilityMap);
 
     // Clear existing polygons
     polygonsRef.current.forEach(polygon => {
@@ -66,6 +70,7 @@ export default function ZoneRenderer({
 
     // Render each zone
     zones.forEach(zone => {
+      console.log('Rendering zone:', zone.name, 'on layer:', zone.layerId, 'visible:', layerVisibilityMap[zone.layerId]);
       // Check if zone's layer is visible
       if (!layerVisibilityMap[zone.layerId]) {
         return;

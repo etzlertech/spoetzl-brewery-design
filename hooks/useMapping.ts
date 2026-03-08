@@ -291,20 +291,25 @@ export function useMapping(property: 'spoetzl' | 'busch', userId: string) {
       return null;
     }
 
+    console.log('Creating zone with:', { name, coordinates: coordinates.length, fillColor, opacity, layerId: history.present.activeLayerId });
+
     const result = ZoneService.createZone(
       name,
       coordinates,
       fillColor,
       opacity,
       history.present.activeLayerId,
-      userId
+      userId,
+      description || '', // shortDescription
+      ''                  // detailedDescription
     );
 
+    console.log('ZoneService result:', result);
+
     if (result.success) {
-      const newZone = {
-        ...result.data,
-        description: description || ''
-      };
+      const newZone = result.data;
+
+      console.log('Adding zone to state:', newZone);
 
       updateState({
         zones: [...history.present.zones, newZone]
@@ -313,6 +318,7 @@ export function useMapping(property: 'spoetzl' | 'busch', userId: string) {
       ErrorService.showToast(`Zone "${name}" created`, 'success', 2000);
       return newZone;
     } else {
+      console.error('Zone creation failed:', result.error);
       ErrorService.showErrorToast(result.error);
       return null;
     }
