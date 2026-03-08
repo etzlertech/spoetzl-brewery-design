@@ -6,11 +6,13 @@ import { useParams } from "next/navigation"
 import { Navbar } from "@/components/layout/navbar"
 import { MarkdownLoader } from "@/components/research/markdown-viewer"
 
-interface Document {
+interface Article {
   id: string
   title: string
   file: string
-  description: string
+  summary: string
+  readTime: string
+  topics: string[]
 }
 
 interface Category {
@@ -19,7 +21,7 @@ interface Category {
   description: string
   icon: string
   color: string
-  documents: Document[]
+  articles: Article[]
 }
 
 interface ResearchIndex {
@@ -29,7 +31,7 @@ interface ResearchIndex {
 export default function ResearchDocumentPage() {
   const params = useParams()
   const [researchData, setResearchData] = useState<ResearchIndex | null>(null)
-  const [currentDoc, setCurrentDoc] = useState<Document | null>(null)
+  const [currentArticle, setCurrentArticle] = useState<Article | null>(null)
   const [currentCategory, setCurrentCategory] = useState<Category | null>(null)
   const [loading, setLoading] = useState(true)
 
@@ -43,9 +45,9 @@ export default function ResearchDocumentPage() {
         const category = data.categories.find((cat: Category) => cat.id === params.category)
         if (category) {
           setCurrentCategory(category)
-          const doc = category.documents.find((d: Document) => d.id === params.document)
-          if (doc) {
-            setCurrentDoc(doc)
+          const article = category.articles.find((a: Article) => a.id === params.document)
+          if (article) {
+            setCurrentArticle(article)
           }
         }
       } catch (error) {
@@ -71,7 +73,7 @@ export default function ResearchDocumentPage() {
     )
   }
 
-  if (!currentDoc || !currentCategory) {
+  if (!currentArticle || !currentCategory) {
     return (
       <div className="min-h-screen bg-white">
         <Navbar />
@@ -91,7 +93,7 @@ export default function ResearchDocumentPage() {
     )
   }
 
-  const otherDocs = currentCategory.documents.filter(doc => doc.id !== currentDoc.id)
+  const otherArticles = currentCategory.articles.filter(article => article.id !== currentArticle.id)
 
   return (
     <div className="min-h-screen bg-white">
@@ -120,52 +122,64 @@ export default function ResearchDocumentPage() {
           </div>
 
           {/* Article Title */}
-          <h1 className="text-5xl md:text-6xl font-bold text-gray-900 mb-6 leading-tight">
-            {currentDoc.title}
+          <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4 leading-tight">
+            {currentArticle.title}
           </h1>
 
-          {/* Article Description */}
-          <p className="text-xl md:text-2xl text-gray-600 leading-relaxed">
-            {currentDoc.description}
+          {/* Article Summary */}
+          <p className="text-lg md:text-xl text-gray-600 leading-relaxed mb-6">
+            {currentArticle.summary}
           </p>
 
           {/* Metadata */}
-          <div className="mt-8 flex items-center gap-4 text-sm text-gray-500">
-            <time>March 2026</time>
+          <div className="flex flex-wrap items-center gap-3 text-sm text-gray-500">
+            <span className="font-medium">{currentArticle.readTime}</span>
             <span>·</span>
-            <span>Research Article</span>
+            <time>March 2026</time>
+            {currentArticle.topics && currentArticle.topics.length > 0 && (
+              <>
+                <span>·</span>
+                <div className="flex gap-2">
+                  {currentArticle.topics.map((topic, i) => (
+                    <span key={i} className="px-2.5 py-1 rounded-full bg-gray-100 text-gray-700 font-medium text-xs">
+                      {topic}
+                    </span>
+                  ))}
+                </div>
+              </>
+            )}
           </div>
         </div>
       </header>
 
       {/* Article Content */}
-      <main className="mx-auto max-w-4xl px-6 py-16 lg:px-8">
-        <MarkdownLoader filePath={currentDoc.file} />
+      <main className="mx-auto max-w-4xl px-4 py-12 sm:px-6 lg:px-8">
+        <MarkdownLoader filePath={currentArticle.file} />
       </main>
 
       {/* Related Articles Section */}
-      {otherDocs.length > 0 && (
-        <section className="border-t border-gray-200 bg-gray-50 py-16">
-          <div className="mx-auto max-w-4xl px-6 lg:px-8">
-            <h2 className="text-3xl font-bold text-gray-900 mb-8">
+      {otherArticles.length > 0 && (
+        <section className="border-t border-gray-200 bg-gray-50 py-12">
+          <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
+            <h2 className="text-2xl font-bold text-gray-900 mb-6">
               More in {currentCategory.title}
             </h2>
-            <div className="grid gap-6 md:grid-cols-2">
-              {otherDocs.map((doc) => (
+            <div className="space-y-4">
+              {otherArticles.map((article) => (
                 <Link
-                  key={doc.id}
-                  href={`/research/${currentCategory.id}/${doc.id}`}
-                  className="group rounded-2xl border border-gray-200 bg-white p-6 transition hover:border-green-500 hover:shadow-lg"
+                  key={article.id}
+                  href={`/research/${currentCategory.id}/${article.id}`}
+                  className="group block rounded-xl border border-gray-200 bg-white p-4 transition hover:border-green-500 hover:shadow-md active:scale-[0.98]"
                 >
-                  <h3 className="text-xl font-bold text-gray-900 mb-3 group-hover:text-green-700 transition">
-                    {doc.title}
+                  <h3 className="text-base font-bold text-gray-900 mb-2 group-hover:text-green-700 transition line-clamp-2">
+                    {article.title}
                   </h3>
-                  <p className="text-gray-600 leading-relaxed">{doc.description}</p>
-                  <div className="mt-4 flex items-center text-green-700 font-semibold text-sm">
-                    Read article
-                    <svg className="ml-2 h-4 w-4 transition group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                    </svg>
+                  <p className="text-sm text-gray-600 leading-relaxed mb-3 line-clamp-2">{article.summary}</p>
+                  <div className="flex items-center justify-between text-xs text-gray-500">
+                    <span className="font-medium">{article.readTime}</span>
+                    <span className="text-green-700 font-semibold group-hover:translate-x-1 transition">
+                      Read →
+                    </span>
                   </div>
                 </Link>
               ))}
@@ -175,17 +189,17 @@ export default function ResearchDocumentPage() {
       )}
 
       {/* Bottom Navigation */}
-      <div className="border-t border-gray-200 py-8">
-        <div className="mx-auto max-w-4xl px-6 lg:px-8 flex gap-4">
+      <div className="border-t border-gray-200 py-6">
+        <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 flex gap-3">
           <Link
             href="/research"
-            className="flex-1 rounded-full border-2 border-gray-300 px-6 py-3 text-center font-semibold text-gray-700 transition hover:border-green-600 hover:text-green-700"
+            className="flex-1 rounded-full border-2 border-gray-300 px-4 py-2.5 text-center text-sm font-semibold text-gray-700 transition hover:border-green-600 hover:text-green-700 active:scale-95"
           >
-            ← Research Center
+            ← All Articles
           </Link>
           <Link
             href="/dashboard"
-            className="flex-1 rounded-full bg-green-700 px-6 py-3 text-center font-semibold text-white transition hover:bg-green-800"
+            className="flex-1 rounded-full bg-green-700 px-4 py-2.5 text-center text-sm font-semibold text-white transition hover:bg-green-800 active:scale-95"
           >
             Dashboard
           </Link>

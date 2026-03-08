@@ -2,106 +2,129 @@
   "categories": [
     {
       "id": "busch-gardens",
-      "title": "Busch Gardens Design Research",
-      "description": "Comprehensive landscape design inspiration from Busch Gardens Williamsburg",
+      "title": "Design Inspiration",
+      "description": "World-class landscape design from America's most beautiful theme park",
       "icon": "🎨",
       "color": "from-purple-500 to-indigo-600",
-      "documents": [
+      "articles": [
         {
           "id": "readme",
-          "title": "Research Overview",
+          "title": "Inside the World's Most Beautiful Theme Park",
           "file": "busch-gardens/README.md",
-          "description": "Complete overview of Busch Gardens research project"
+          "summary": "How Busch Gardens Williamsburg has maintained its crown as the world's most beautiful theme park for 34 consecutive years.",
+          "readTime": "5 min read",
+          "topics": ["Awards", "Excellence", "Overview"]
         },
         {
           "id": "landscape-design",
-          "title": "Landscape Design Elements",
+          "title": "The Art of Intensity: Creating Landscapes That Compete with Roller Coasters",
           "file": "busch-gardens/busch-gardens-landscape-design.md",
-          "description": "Core landscape design principles and elements"
+          "summary": "Discover the bold design principles behind landscapes compelling enough to rival high-energy attractions.",
+          "readTime": "15 min read",
+          "topics": ["Design Philosophy", "Horticulture", "Best Practices"]
         },
         {
           "id": "landscape-research",
-          "title": "Detailed Landscape Research",
+          "title": "30,000 Plants, 6 Seasons: The Science Behind Year-Round Beauty",
           "file": "busch-gardens/landscape-design-research.md",
-          "description": "In-depth analysis of landscape techniques"
+          "summary": "An inside look at the horticultural strategies, seasonal rotations, and in-house production that keep the park perpetually vibrant.",
+          "readTime": "12 min read",
+          "topics": ["Horticulture", "Sustainability", "Operations"]
         },
         {
           "id": "themed-areas",
-          "title": "Themed Areas Analysis",
+          "title": "10 European Villages, One Seamless Experience",
           "file": "busch-gardens/themed-areas-research.md",
-          "description": "European-themed area designs and concepts"
+          "summary": "How architectural authenticity and theatrical interpretation create immersive environments across ten distinct European themes.",
+          "readTime": "18 min read",
+          "topics": ["Themed Design", "Architecture", "Storytelling"]
         },
         {
           "id": "visitor-experience",
-          "title": "Visitor Experience Design",
+          "title": "The Psychology of Park Flow: Designing Movement and Discovery",
           "file": "busch-gardens/visitor-experience-research.md",
-          "description": "Guest journey and experience design patterns"
+          "summary": "Explore the strategic design decisions that guide guests through a carefully choreographed journey of sights, sounds, and experiences.",
+          "readTime": "14 min read",
+          "topics": ["Visitor Experience", "Wayfinding", "Accessibility"]
         },
         {
           "id": "visual-assets",
-          "title": "Visual Assets Library",
+          "title": "Visual Reference Library: 150+ Curated Design Images",
           "file": "busch-gardens/visual-assets-urls.md",
-          "description": "150+ curated visual reference URLs"
+          "summary": "A comprehensive collection of professional photography and video resources showcasing award-winning landscape design.",
+          "readTime": "3 min read",
+          "topics": ["Photography", "Visual Resources", "Inspiration"]
         }
       ]
     },
     {
       "id": "technical",
-      "title": "Technical Research & Feasibility",
-      "description": "~100,000 words of technical analysis for VA-TX adaptation",
+      "title": "Regional Adaptation",
+      "description": "Bringing Virginia's design excellence to the Texas climate",
       "icon": "🔬",
       "color": "from-green-600 to-teal-600",
-      "documents": [
+      "articles": [
         {
           "id": "tech-readme",
-          "title": "Technical Research Overview",
+          "title": "Can You Bring Busch Gardens to Texas? The Answer May Surprise You",
           "file": "technical/README.md",
-          "description": "Quick start guide to technical research (50 pages)"
+          "summary": "An 85-90% success rate is achievable—but it requires fundamental rethinking of plant choices, water systems, and soil preparation.",
+          "readTime": "8 min read",
+          "topics": ["Feasibility", "Budget", "Implementation"]
         },
         {
           "id": "tech-summary",
-          "title": "Executive Summary",
+          "title": "Virginia vs. Texas: A Tale of Two Climates",
           "file": "technical/TECHNICAL-RESEARCH-SUMMARY.md",
-          "description": "Complete technical research summary with recommendations"
+          "summary": "Why adapting award-winning landscape design from Virginia to Texas means replacing 70-80% of the plant palette.",
+          "readTime": "20 min read",
+          "topics": ["Climate Analysis", "Strategy", "Recommendations"]
         },
         {
           "id": "academic-papers",
-          "title": "Academic Papers Analysis",
+          "title": "35 Years of Excellence: What Academic Research Reveals",
           "file": "technical/academic-papers/technical-research-papers.md",
-          "description": "88 sources, 35,000 words of technical literature review"
+          "summary": "Insights from 88 academic sources on theme park landscape architecture, sustainable practices, and design innovation.",
+          "readTime": "25 min read",
+          "topics": ["Research", "Academic Studies", "Industry Analysis"]
         },
         {
           "id": "va-climate",
-          "title": "Williamsburg VA Climate",
+          "title": "Williamsburg's Secret Weapon: A Climate Made for Gardens",
           "file": "technical/regional-analysis/williamsburg-va-climate-landscape.md",
-          "description": "Comprehensive Virginia climate and landscape analysis"
+          "summary": "Zone 8a, acidic soils, and coastal humidity create ideal conditions for boxwoods, azaleas, and 50,000 tulips each spring.",
+          "readTime": "12 min read",
+          "topics": ["Virginia", "Climate", "Native Plants"]
         },
         {
           "id": "tx-climate",
-          "title": "Shiner TX Climate",
+          "title": "Shiner, Texas: Where Heat and Clay Meet Heritage",
           "file": "technical/regional-analysis/shiner-tx-climate-landscape.md",
-          "description": "Texas climate analysis (76 pages, 20,000 words)"
+          "summary": "Discover how Zone 9a, alkaline clay soils, and 16+ weeks of extreme heat shape a completely different horticultural approach.",
+          "readTime": "18 min read",
+          "topics": ["Texas", "Climate", "Challenges"]
         },
         {
           "id": "gap-analysis",
-          "title": "Regional Gap Analysis",
+          "title": "The $475K Question: What It Really Takes to Adapt",
           "file": "technical/gap-analysis/va-tx-regional-comparison.md",
-          "description": "VA-TX comparison and adaptation requirements (47 pages)"
+          "summary": "From soil preparation costs 9-14x higher to irrigation needs 300-400% greater—a complete breakdown of the adaptation challenge.",
+          "readTime": "15 min read",
+          "topics": ["Budget", "Comparison", "Requirements"]
         },
         {
           "id": "plant-guide",
-          "title": "Texas Plant Adaptation Guide",
+          "title": "From Tulips to Bluebonnets: The Complete Plant Swap Guide",
           "file": "technical/gap-analysis/texas-plant-adaptation-guide.md",
-          "description": "Complete plant substitution guide (69 pages, 18,000 words)"
+          "summary": "Plant-by-plant substitutions that maintain visual impact while embracing Texas-adapted species—plus a 98% cost savings on spring color.",
+          "readTime": "22 min read",
+          "topics": ["Plant Selection", "Substitutions", "Native Plants"]
         }
       ]
     }
   ],
-  "stats": {
-    "totalDocuments": 13,
-    "totalWords": 100000,
-    "totalImages": 23,
-    "categories": 2,
-    "researchHours": 120
+  "featured": {
+    "id": "landscape-design",
+    "category": "busch-gardens"
   }
 }
