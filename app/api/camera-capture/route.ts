@@ -13,12 +13,11 @@ const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
 // Constants
 const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
-const ALLOWED_TYPES = ['image/jpeg', 'image/png', 'image/webp'];
-const ALLOWED_EXTENSIONS = ['jpg', 'jpeg', 'png', 'webp'];
 
 /**
  * POST /api/camera-capture
  * Uploads an image from camera/gallery to Supabase storage
+ * Accepts all image formats: JPEG, PNG, WebP, HEIC, GIF, BMP, TIFF, etc.
  *
  * Request: FormData with 'image' file
  * Response: { url: string } or { error: string }
@@ -36,10 +35,10 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Validate file type
-    if (!ALLOWED_TYPES.includes(file.type)) {
+    // Validate file type - accept all image/* types
+    if (!file.type.startsWith('image/')) {
       return NextResponse.json(
-        { error: 'Invalid file type. Please upload a JPEG, PNG, or WebP image.' },
+        { error: 'Invalid file type. Please upload an image file.' },
         { status: 400 }
       );
     }
@@ -52,11 +51,11 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Extract file extension
-    const fileExt = file.name.split('.').pop()?.toLowerCase();
-    if (!fileExt || !ALLOWED_EXTENSIONS.includes(fileExt)) {
+    // Extract file extension - preserve original extension for all image types
+    const fileExt = file.name.split('.').pop()?.toLowerCase() || 'jpg';
+    if (!fileExt) {
       return NextResponse.json(
-        { error: 'Invalid file extension' },
+        { error: 'Invalid file name' },
         { status: 400 }
       );
     }

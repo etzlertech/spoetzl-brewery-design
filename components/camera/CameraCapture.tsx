@@ -26,10 +26,9 @@ export default function CameraCapture({ isOpen, onClose }: CameraCaptureProps) {
     const file = e.target.files?.[0];
     if (!file) return;
 
-    // Validate file type
-    const validTypes = ['image/jpeg', 'image/png', 'image/webp'];
-    if (!validTypes.includes(file.type)) {
-      ErrorService.showToast('Please select a valid image (JPEG, PNG, or WebP)', 'error', 5000);
+    // Validate file type - accept all image formats
+    if (!file.type.startsWith('image/')) {
+      ErrorService.showToast('Please select a valid image file', 'error', 5000);
       return;
     }
 
@@ -216,7 +215,7 @@ export default function CameraCapture({ isOpen, onClose }: CameraCaptureProps) {
               </label>
 
               <p className="text-xs text-gray-500 mt-4">
-                JPEG, PNG, or WebP • Max 10MB
+                All image formats supported • Max 10MB
               </p>
             </div>
           )}
