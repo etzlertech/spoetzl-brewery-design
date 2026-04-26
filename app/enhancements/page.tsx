@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { Navbar } from '@/components/layout/navbar';
+import VisualAssetStrip from '@/components/media/VisualAssetStrip';
 import {
   ArrowRight,
   CheckCircle2,
@@ -19,6 +20,11 @@ import {
   proposals,
   type ProjectZone,
 } from '@/lib/project-data';
+import {
+  getClarityGapVisualProof,
+  getProjectVisualProof,
+  getZoneVisualProof,
+} from '@/lib/visual-proof';
 
 const boardStages = [
   {
@@ -146,6 +152,19 @@ export default function EnhancementsPage() {
                   className="mt-2 w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-900 outline-none transition focus:border-green-500 focus:ring-2 focus:ring-green-100"
                 />
               </label>
+              <div className="rounded-lg border border-slate-200 bg-slate-50 p-3">
+                <VisualAssetStrip
+                  title="Evidence preview"
+                  eyebrow="Attach proof"
+                  description="Keep intake lightweight: three visuals are enough to ground the next proposal conversation."
+                  fallbackAssets={getProjectVisualProof(3)}
+                  limit={3}
+                  size="sm"
+                  compact
+                  href="/images"
+                  actionLabel="Open media"
+                />
+              </div>
             </div>
           </div>
 
@@ -185,6 +204,17 @@ export default function EnhancementsPage() {
                   <div key={gap.id} className="border-l-4 border-amber-400 pl-3">
                     <p className="text-sm font-semibold text-slate-950">{gap.title}</p>
                     <p className="mt-1 text-sm leading-6 text-slate-700">{gap.recommendation}</p>
+                    <div className="mt-3">
+                      <VisualAssetStrip
+                        fallbackAssets={getClarityGapVisualProof(gap, 2)}
+                        limit={2}
+                        size="xs"
+                        compact
+                        showHeader={false}
+                        showMeta={false}
+                        interactiveAssets={false}
+                      />
+                    </div>
                   </div>
                 ))}
               </div>
@@ -216,6 +246,17 @@ export default function EnhancementsPage() {
                         </span>
                       </div>
                       <p className="mt-1 text-sm leading-6 text-slate-700">{zone.summary}</p>
+                      <div className="mt-3">
+                        <VisualAssetStrip
+                          fallbackAssets={getZoneVisualProof(zone, 2)}
+                          limit={2}
+                          size="xs"
+                          compact
+                          showHeader={false}
+                          showMeta={false}
+                          interactiveAssets={false}
+                        />
+                      </div>
                       <dl className="mt-3 grid gap-2 text-sm">
                         <div className="flex gap-2">
                           <dt className="shrink-0 font-semibold text-slate-500">Next</dt>

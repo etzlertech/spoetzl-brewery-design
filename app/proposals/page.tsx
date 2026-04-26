@@ -11,6 +11,7 @@ import {
   PackageCheck,
 } from 'lucide-react';
 import { Navbar } from '@/components/layout/navbar';
+import VisualAssetStrip from '@/components/media/VisualAssetStrip';
 import {
   approvalItems,
   clarityGaps,
@@ -21,6 +22,12 @@ import {
   type Proposal,
   type ProposalLineItem,
 } from '@/lib/project-data';
+import {
+  getClarityGapVisualProof,
+  getProjectVisualProof,
+  getProposalVisualProof,
+  getVisualProofQueryForProposal,
+} from '@/lib/visual-proof';
 
 export const metadata = {
   title: 'Proposals | Spoetzl Brewery Landscape Design',
@@ -78,7 +85,7 @@ export default function ProposalsPage() {
   const estimateTotal = proposals.length;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-green-50 via-amber-50 to-green-100">
+    <div className="min-h-screen overflow-x-hidden bg-gradient-to-br from-green-50 via-amber-50 to-green-100">
       <Navbar />
 
       <main className="mx-auto max-w-7xl px-4 pb-20 pt-6 sm:px-6 lg:px-8">
@@ -131,6 +138,19 @@ export default function ProposalsPage() {
               </div>
             </div>
           </aside>
+        </section>
+
+        <section className="mb-6 rounded-lg border border-green-100 bg-white p-4 shadow-sm sm:p-5">
+          <VisualAssetStrip
+            title="Proposal visual packets"
+            eyebrow="Evidence before signoff"
+            description="Current attached proposal media appears first, with curated reference thumbnails filling any missing proof slots."
+            fallbackAssets={getProjectVisualProof(6)}
+            limit={6}
+            size="sm"
+            compact
+            href="/images"
+          />
         </section>
 
         <section className="mb-6 grid gap-3 sm:grid-cols-3">
@@ -190,6 +210,18 @@ export default function ProposalsPage() {
                       <ArrowRight className="h-4 w-4" />
                     </Link>
                   </div>
+                </div>
+
+                <div className="mt-5 rounded-lg border border-slate-200 bg-slate-50 p-3">
+                  <VisualAssetStrip
+                    title={`${proposal.title} evidence`}
+                    query={getVisualProofQueryForProposal(proposal)}
+                    fallbackAssets={getProposalVisualProof(proposal, 4)}
+                    limit={4}
+                    size="sm"
+                    compact
+                    href={`/proposals/${proposal.id}`}
+                  />
                 </div>
 
                 <div className="mt-6 grid gap-6 lg:grid-cols-[0.9fr_1.1fr]">
@@ -315,9 +347,21 @@ export default function ProposalsPage() {
                     </h3>
                     <div className="mt-3 grid gap-3 sm:grid-cols-2">
                       {openGaps.map((gap) => (
-                        <div key={gap.id} className="border-l-4 border-amber-400 pl-3">
-                          <p className="text-sm font-semibold text-slate-950">{gap.title}</p>
-                          <p className="mt-1 text-sm leading-6 text-slate-700">{gap.recommendation}</p>
+                        <div key={gap.id} className="flex gap-3 border-l-4 border-amber-400 pl-3">
+                          <VisualAssetStrip
+                            fallbackAssets={getClarityGapVisualProof(gap, 1)}
+                            limit={1}
+                            size="sm"
+                            compact
+                            showHeader={false}
+                            showMeta={false}
+                            interactiveAssets={false}
+                            className="shrink-0"
+                          />
+                          <div>
+                            <p className="text-sm font-semibold text-slate-950">{gap.title}</p>
+                            <p className="mt-1 text-sm leading-6 text-slate-700">{gap.recommendation}</p>
+                          </div>
                         </div>
                       ))}
                     </div>

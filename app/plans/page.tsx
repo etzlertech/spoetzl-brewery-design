@@ -10,6 +10,7 @@ import {
   TriangleAlert,
 } from 'lucide-react';
 import { Navbar } from '@/components/layout/navbar';
+import VisualAssetStrip from '@/components/media/VisualAssetStrip';
 import {
   approvalItems,
   clarityGaps,
@@ -19,6 +20,11 @@ import {
   walkthroughs,
   type ApprovalItem,
 } from '@/lib/project-data';
+import {
+  getApprovalVisualProof,
+  getProposalVisualProof,
+  getVisualProofQueryForProposal,
+} from '@/lib/visual-proof';
 
 export const metadata = {
   title: 'Approval Plan | Spoetzl Brewery Landscape Design',
@@ -108,6 +114,20 @@ export default function PlansPage() {
           </aside>
         </section>
 
+        <section className="mb-6 rounded-lg border border-green-100 bg-white p-4 shadow-sm sm:p-5">
+          <VisualAssetStrip
+            title="Approval evidence packet"
+            eyebrow="Proof before signoff"
+            description="Visual context sits ahead of the signoff language so approval decisions are anchored to what Spoetzl is actually reviewing."
+            query={getVisualProofQueryForProposal(activeProposal)}
+            fallbackAssets={getProposalVisualProof(activeProposal, 5)}
+            limit={5}
+            size="sm"
+            compact
+            href={`/proposals/${activeProposal.id}`}
+          />
+        </section>
+
         <section className="mb-6 grid gap-4 lg:grid-cols-[1fr_0.9fr]">
           <div className="rounded-lg border border-green-100 bg-white p-5 shadow-sm">
             <div className="mb-4 flex items-center gap-2 text-green-950">
@@ -187,6 +207,17 @@ export default function PlansPage() {
               <p className="mt-4 border-t border-slate-100 pt-4 text-sm leading-6 text-slate-700">
                 {item.lockedScope}
               </p>
+              <div className="mt-4">
+                <VisualAssetStrip
+                  fallbackAssets={getApprovalVisualProof(item.id, 3)}
+                  limit={3}
+                  size="xs"
+                  compact
+                  showHeader={false}
+                  showMeta={false}
+                  interactiveAssets={false}
+                />
+              </div>
             </article>
           ))}
         </section>

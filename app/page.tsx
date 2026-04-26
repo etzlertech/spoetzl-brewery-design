@@ -21,9 +21,17 @@ import {
   timelineEvents,
   getToneClasses,
 } from '@/lib/project-data';
+import VisualAssetStrip from '@/components/media/VisualAssetStrip';
+import VisualAssetThumbnail from '@/components/media/VisualAssetThumbnail';
+import {
+  getClarityGapVisualProof,
+  getProjectVisualProof,
+  getZoneVisualProof,
+} from '@/lib/visual-proof';
 
 const highPriorityGaps = clarityGaps.filter((gap) => gap.priority === 'High');
 const activeZones = projectZones.filter((zone) => zone.status !== 'Maintenance').slice(0, 4);
+const projectProofAssets = getProjectVisualProof(6);
 
 const quickActions = [
   {
@@ -164,8 +172,18 @@ function DesktopHome() {
                   {projectOverview.name} turns zones, evidence, terms, approvals,
                   and next actions into one shared visual workspace.
                 </p>
+                <VisualAssetStrip
+                  fallbackAssets={projectProofAssets}
+                  limit={4}
+                  size="xs"
+                  compact
+                  showHeader={false}
+                  showMeta={false}
+                  interactiveAssets={false}
+                  className="mt-4 max-w-md"
+                />
               </div>
-              <div className="w-60 rounded-2xl border border-amber-200 bg-amber-50 p-3.5">
+              <div className="w-[330px] rounded-2xl border border-amber-200 bg-amber-50 p-3.5">
                 <div className="flex items-center gap-2 text-amber-800">
                   <CalendarDays className="h-5 w-5" />
                   <p className="text-xs font-black uppercase tracking-wide">
@@ -203,15 +221,26 @@ function DesktopHome() {
                         : 'border-white/10 bg-white/8 hover:bg-white/12'
                     }`}
                   >
-                    <div className="flex items-start justify-between gap-3">
-                      <p className="text-lg font-black">{zone.name}</p>
-                      <span className={`rounded-full border px-2 py-1 text-[10px] font-black ${getToneClasses(zone.tone)}`}>
-                        {zone.status}
-                      </span>
+                    <div className="flex items-start gap-3">
+                      <VisualAssetThumbnail
+                        asset={getZoneVisualProof(zone, 1)[0]}
+                        size="sm"
+                        showMeta={false}
+                        interactive={false}
+                        className="shrink-0"
+                      />
+                      <div className="min-w-0 flex-1">
+                        <div className="flex items-start justify-between gap-3">
+                          <p className="text-lg font-black">{zone.name}</p>
+                          <span className={`rounded-full border px-2 py-1 text-[10px] font-black ${getToneClasses(zone.tone)}`}>
+                            {zone.status}
+                          </span>
+                        </div>
+                        <p className="mt-2 line-clamp-2 text-sm leading-5 text-white/70">
+                          {zone.summary}
+                        </p>
+                      </div>
                     </div>
-                    <p className="mt-2 line-clamp-2 text-sm leading-5 text-white/70">
-                      {zone.summary}
-                    </p>
                     <p className="mt-3 text-xs font-black uppercase tracking-wide text-emerald-200">
                       {zone.openQuestions} open question{zone.openQuestions === 1 ? '' : 's'}
                     </p>
@@ -221,7 +250,7 @@ function DesktopHome() {
             </div>
 
             <div className="flex min-h-0 flex-col gap-5">
-              <div className="relative rounded-[1.65rem] border border-white/70 bg-white p-4 pt-8 shadow-xl shadow-black/15">
+              <div className="relative rounded-[1.65rem] border border-white/70 bg-white p-3.5 pt-7 shadow-xl shadow-black/15">
                 <Pin className="bg-blue-500" />
                 <div className="flex items-center justify-between gap-4">
                   <div>
@@ -232,12 +261,12 @@ function DesktopHome() {
                   </div>
                   <CheckCircle2 className="h-8 w-8 text-blue-700" />
                 </div>
-                <div className="mt-3 space-y-2.5">
+                <div className="mt-2 space-y-2">
                   {approvalItems.map((approval) => (
                     <Link
                       key={approval.id}
                       href="/proposals"
-                      className="flex items-center justify-between gap-4 rounded-2xl border border-slate-200 px-3.5 py-2.5 transition hover:border-blue-300 hover:bg-blue-50"
+                      className="flex items-center justify-between gap-4 rounded-2xl border border-slate-200 px-3 py-2 transition hover:border-blue-300 hover:bg-blue-50"
                     >
                       <span>
                         <span className="block text-sm font-black">{approval.title}</span>
@@ -274,6 +303,14 @@ function DesktopHome() {
                     <p className="mt-1 text-sm font-bold leading-5 text-amber-950">
                       {gap.question}
                     </p>
+                    <div className="mt-3">
+                      <VisualAssetThumbnail
+                        asset={getClarityGapVisualProof(gap, 1)[0]}
+                        size="sm"
+                        showMeta={false}
+                        interactive={false}
+                      />
+                    </div>
                   </Link>
                 ))}
               </div>
@@ -351,8 +388,8 @@ function MobileHome() {
   return (
     <main className="min-h-screen bg-[#f7f4ec] pb-24 text-slate-950 lg:hidden">
       <section className="border-b border-amber-900/10 bg-white">
-        <div className="mx-auto grid max-w-7xl gap-8 px-4 py-6 sm:px-6 lg:grid-cols-[1.15fr_0.85fr] lg:px-8 lg:py-10">
-          <div className="space-y-6">
+        <div className="mx-auto grid w-full min-w-0 max-w-7xl gap-8 px-4 py-6 sm:px-6 lg:grid-cols-[1.15fr_0.85fr] lg:px-8 lg:py-10">
+          <div className="min-w-0 space-y-6">
             <div className="flex flex-wrap gap-2">
               <span className="rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1 text-xs font-bold uppercase tracking-wide text-emerald-900">
                 Evergold x Spoetzl
@@ -386,6 +423,19 @@ function MobileHome() {
               </div>
             </div>
 
+            <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4 shadow-sm">
+              <VisualAssetStrip
+                title="Today visual proof"
+                eyebrow="Field media"
+                description="Live uploads appear first; curated references hold the place until proof is attached."
+                fallbackAssets={projectProofAssets}
+                limit={5}
+                size="sm"
+                compact
+                href="/images"
+              />
+            </div>
+
             <div className="grid gap-3 sm:grid-cols-2">
               {quickActions.map((action) => {
                 const Icon = action.icon;
@@ -407,7 +457,7 @@ function MobileHome() {
             </div>
           </div>
 
-          <aside className="rounded-3xl border border-slate-200 bg-slate-950 p-5 text-white shadow-xl lg:p-6">
+          <aside className="min-w-0 rounded-3xl border border-slate-200 bg-slate-950 p-5 text-white shadow-xl lg:p-6">
             <div className="flex items-center justify-between gap-4">
               <div>
                 <p className="text-sm font-semibold text-emerald-200">Current phase</p>
@@ -445,8 +495,8 @@ function MobileHome() {
         </div>
       </section>
 
-      <section className="mx-auto grid max-w-7xl gap-5 px-4 py-6 sm:px-6 lg:grid-cols-[0.9fr_1.1fr] lg:px-8">
-        <div className="space-y-5">
+      <section className="mx-auto grid w-full min-w-0 max-w-7xl gap-5 px-4 py-6 sm:px-6 lg:grid-cols-[0.9fr_1.1fr] lg:px-8">
+        <div className="min-w-0 space-y-5">
           <div className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
             <div className="flex items-center justify-between gap-3">
               <div>
@@ -521,7 +571,7 @@ function MobileHome() {
           </div>
         </div>
 
-        <div className="space-y-5">
+        <div className="min-w-0 space-y-5">
           <div className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
             <div className="flex items-center justify-between">
               <div>

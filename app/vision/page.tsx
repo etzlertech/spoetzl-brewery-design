@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { Navbar } from '@/components/layout/navbar';
+import VisualAssetStrip from '@/components/media/VisualAssetStrip';
 import {
   ArrowRight,
   BadgeCheck,
@@ -22,6 +23,11 @@ import {
   visionPrinciples,
 } from '@/lib/project-data';
 import type { StatusTone, TimelineEvent } from '@/lib/project-data';
+import {
+  getProjectVisualProof,
+  getVisionPrincipleVisualProof,
+  getZoneVisualProof,
+} from '@/lib/visual-proof';
 
 export const metadata = {
   title: 'Vision | Spoetzl Brewery Landscape Design',
@@ -76,6 +82,19 @@ export default function VisionPage() {
               </p>
             </div>
           </div>
+        </section>
+
+        <section className="mb-8 rounded-xl border border-green-100 bg-white p-4 shadow-sm">
+          <VisualAssetStrip
+            title="Inspiration and current-site references"
+            eyebrow="Visual north star"
+            description="Use the images as translation evidence: what to borrow, what to adapt, and what must still fit Shiner."
+            fallbackAssets={getProjectVisualProof(6)}
+            limit={6}
+            size="sm"
+            compact
+            href="/images"
+          />
         </section>
 
         <section className="mb-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
@@ -139,6 +158,17 @@ export default function VisionPage() {
                   </p>
                   <p className="mt-1 text-sm leading-6 text-green-900">{principle.proof}</p>
                 </div>
+                <div className="mt-3">
+                  <VisualAssetStrip
+                    fallbackAssets={getVisionPrincipleVisualProof(principle, 1)}
+                    limit={1}
+                    size="sm"
+                    compact
+                    showHeader={false}
+                    showMeta={false}
+                    interactiveAssets={false}
+                  />
+                </div>
               </article>
             ))}
           </div>
@@ -171,6 +201,17 @@ export default function VisionPage() {
                     </span>
                   </div>
                   <p className="mt-4 text-sm leading-6 text-gray-700">{zone.designIntent}</p>
+                  <div className="mt-3">
+                    <VisualAssetStrip
+                      fallbackAssets={getZoneVisualProof(zone, 2)}
+                      limit={2}
+                      size="xs"
+                      compact
+                      showHeader={false}
+                      showMeta={false}
+                      interactiveAssets={false}
+                    />
+                  </div>
                   <div className="mt-4 flex flex-wrap gap-2">
                     {zone.plantPalette.map((plant) => (
                       <span

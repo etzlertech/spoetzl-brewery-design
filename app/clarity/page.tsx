@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { Navbar } from '@/components/layout/navbar';
+import VisualAssetStrip from '@/components/media/VisualAssetStrip';
 import {
   AlertTriangle,
   ArrowRight,
@@ -19,6 +20,11 @@ import {
   proposals,
 } from '@/lib/project-data';
 import type { ApprovalItem, ClarityGap, ProjectSide } from '@/lib/project-data';
+import {
+  getApprovalVisualProof,
+  getClarityGapVisualProof,
+  getProjectVisualProof,
+} from '@/lib/visual-proof';
 
 export const metadata = {
   title: 'Clarity Inbox | Spoetzl Brewery Landscape Design',
@@ -161,6 +167,19 @@ export default function ClarityPage() {
           })}
         </section>
 
+        <section className="mb-8 rounded-xl border border-green-100 bg-white p-4 shadow-sm">
+          <VisualAssetStrip
+            title="Clarity evidence"
+            eyebrow="Linked proof"
+            description="Questions stay tied to the photos, concepts, and field references that make the decision understandable."
+            fallbackAssets={getProjectVisualProof(6)}
+            limit={6}
+            size="sm"
+            compact
+            href="/images"
+          />
+        </section>
+
         <section className="mb-10 grid gap-4 lg:grid-cols-[minmax(0,1.45fr)_minmax(320px,0.85fr)]">
           <div>
             <div className="mb-4">
@@ -200,6 +219,17 @@ export default function ClarityPage() {
                         <CalendarClock className="h-4 w-4 text-amber-700" />
                         {gap.zone} - due {gap.due}
                       </p>
+                      <div className="mt-3">
+                        <VisualAssetStrip
+                          fallbackAssets={getClarityGapVisualProof(gap, 2)}
+                          limit={2}
+                          size="xs"
+                          compact
+                          showHeader={false}
+                          showMeta={false}
+                          interactiveAssets={false}
+                        />
+                      </div>
                     </div>
                     <HelpCircle className="h-6 w-6 text-amber-700" />
                   </div>
@@ -240,6 +270,17 @@ export default function ClarityPage() {
                     <p className="text-sm font-bold text-gray-950">{item.title}</p>
                     <p className="mt-1 text-xs font-semibold text-gray-600">{item.target}</p>
                     <p className="mt-2 text-sm leading-5 text-gray-700">{item.lockedScope}</p>
+                    <div className="mt-3">
+                      <VisualAssetStrip
+                        fallbackAssets={getApprovalVisualProof(item.id, 2)}
+                        limit={2}
+                        size="xs"
+                        compact
+                        showHeader={false}
+                        showMeta={false}
+                        interactiveAssets={false}
+                      />
+                    </div>
                   </div>
                 ))}
               </div>

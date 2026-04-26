@@ -11,6 +11,7 @@ import {
   TriangleAlert,
 } from 'lucide-react';
 import { Navbar } from '@/components/layout/navbar';
+import VisualAssetStrip from '@/components/media/VisualAssetStrip';
 import {
   clarityGaps,
   getToneClasses,
@@ -19,6 +20,11 @@ import {
   proposals,
   visionPrinciples,
 } from '@/lib/project-data';
+import {
+  getProjectVisualProof,
+  getVisionPrincipleVisualProof,
+  getZoneVisualProof,
+} from '@/lib/visual-proof';
 
 export const metadata = {
   title: 'Specifications | Spoetzl Brewery Landscape Design',
@@ -95,6 +101,19 @@ export default function SpecificationsPage() {
           </aside>
         </section>
 
+        <section className="mb-6 rounded-lg border border-green-100 bg-white p-4 shadow-sm sm:p-5">
+          <VisualAssetStrip
+            title="Specification proof set"
+            eyebrow="Acceptance context"
+            description="Visual references clarify the standard behind zone intent, assumptions, and before/after deliverables."
+            fallbackAssets={getProjectVisualProof(6)}
+            limit={6}
+            size="sm"
+            compact
+            href="/images"
+          />
+        </section>
+
         <section className="mb-6 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
           {visionPrinciples.map((principle) => (
             <article
@@ -110,6 +129,17 @@ export default function SpecificationsPage() {
                 <span className="font-semibold text-slate-950">Proof: </span>
                 {principle.proof}
               </p>
+              <div className="mt-3">
+                <VisualAssetStrip
+                  fallbackAssets={getVisionPrincipleVisualProof(principle, 1)}
+                  limit={1}
+                  size="sm"
+                  compact
+                  showHeader={false}
+                  showMeta={false}
+                  interactiveAssets={false}
+                />
+              </div>
             </article>
           ))}
         </section>
@@ -138,6 +168,17 @@ export default function SpecificationsPage() {
                   </span>
                 </div>
                 <p className="mt-2 text-sm leading-6 text-slate-700">{zone.designIntent}</p>
+                <div className="mt-3">
+                  <VisualAssetStrip
+                    fallbackAssets={getZoneVisualProof(zone, 2)}
+                    limit={2}
+                    size="xs"
+                    compact
+                    showHeader={false}
+                    showMeta={false}
+                    interactiveAssets={false}
+                  />
+                </div>
                 <div className="mt-3 flex flex-wrap gap-2">
                   {zone.plantPalette.map((plant) => (
                     <span

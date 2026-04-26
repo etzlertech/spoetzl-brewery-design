@@ -10,6 +10,7 @@ import {
   ShieldAlert,
 } from 'lucide-react';
 import { Navbar } from '@/components/layout/navbar';
+import VisualAssetStrip from '@/components/media/VisualAssetStrip';
 import {
   clarityGaps,
   projectMetrics,
@@ -20,6 +21,11 @@ import {
   workLogs,
   getToneClasses,
 } from '@/lib/project-data';
+import {
+  getProjectVisualProof,
+  getProposalVisualProof,
+  getZoneVisualProof,
+} from '@/lib/visual-proof';
 
 const sections = [
   {
@@ -112,6 +118,19 @@ export default function DashboardPage() {
           </aside>
         </section>
 
+        <section className="mt-5 rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
+          <VisualAssetStrip
+            title="Latest media and moments"
+            eyebrow="Visual proof"
+            description="Live project uploads land here first, with curated zone references filling the board until field media is attached."
+            fallbackAssets={getProjectVisualProof(6)}
+            limit={6}
+            size="sm"
+            compact
+            href="/images"
+          />
+        </section>
+
         <section className="mt-5 grid gap-5 lg:grid-cols-4">
           {sections.map((section) => {
             const Icon = section.icon;
@@ -151,18 +170,29 @@ export default function DashboardPage() {
                   className="block rounded-2xl border border-slate-200 p-4 transition hover:border-blue-300 hover:bg-blue-50"
                 >
                   <div className="flex items-start justify-between gap-4">
-                    <div>
-                      <p className="font-black">{proposal.title}</p>
-                      <p className="mt-1 text-sm text-slate-600">
-                        {proposal.version} - {proposal.value}
-                      </p>
-                    </div>
+                  <div>
+                    <p className="font-black">{proposal.title}</p>
+                    <p className="mt-1 text-sm text-slate-600">
+                      {proposal.version} - {proposal.value}
+                    </p>
+                  </div>
                     <span className="rounded-full border border-blue-200 bg-blue-50 px-2.5 py-1 text-xs font-black text-blue-900">
                       {proposal.status}
-                    </span>
-                  </div>
-                </Link>
-              ))}
+                  </span>
+                </div>
+                <div className="mt-3">
+                  <VisualAssetStrip
+                    fallbackAssets={getProposalVisualProof(proposal, 3)}
+                    limit={3}
+                    size="xs"
+                    compact
+                    showHeader={false}
+                    showMeta={false}
+                    interactiveAssets={false}
+                  />
+                </div>
+              </Link>
+            ))}
             </div>
           </div>
 
@@ -244,6 +274,17 @@ export default function DashboardPage() {
                   </span>
                 </div>
                 <p className="mt-2 text-sm leading-5 text-slate-600">{zone.nextAction}</p>
+                <div className="mt-3">
+                  <VisualAssetStrip
+                    fallbackAssets={getZoneVisualProof(zone, 2)}
+                    limit={2}
+                    size="xs"
+                    compact
+                    showHeader={false}
+                    showMeta={false}
+                    interactiveAssets={false}
+                  />
+                </div>
               </div>
             ))}
           </div>
