@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import {
   ArrowRight,
+  CalendarDays,
   Camera,
   ClipboardCheck,
   HelpCircle,
@@ -18,8 +19,12 @@ export default function MapsPage() {
     <main className="min-h-screen bg-[#f7f4ec] pb-24 text-slate-950 md:pb-0">
       <header className="border-b border-slate-200 bg-white">
         <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
-          <Link href="/" className="text-sm font-black text-emerald-900">
-            Back to Today
+          <Link
+            href="/"
+            className="inline-flex items-center gap-2 rounded-lg border border-emerald-200 bg-emerald-50 px-3 py-2 text-sm font-black text-emerald-950 shadow-sm transition hover:border-emerald-300 hover:bg-emerald-100"
+          >
+            <CalendarDays className="h-4 w-4" />
+            Today board
           </Link>
           <div className="mt-5 grid gap-5 lg:grid-cols-[1fr_0.8fr] lg:items-end">
             <div>

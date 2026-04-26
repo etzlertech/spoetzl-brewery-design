@@ -123,7 +123,7 @@ export default function Toolbar({
       </div>
 
       {/* Desktop Toolbar */}
-      <div className="hidden md:block absolute top-4 left-4 z-[1000] bg-white rounded-lg shadow-lg border border-gray-200">
+      <div className="hidden md:block absolute top-4 left-28 z-[1000] bg-white rounded-lg shadow-lg border border-gray-200">
         <div className="flex items-center gap-2 p-2">
         {/* Mode Switcher */}
         <div className="flex items-center gap-1 pr-2 border-r border-gray-200">

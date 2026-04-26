@@ -14,66 +14,17 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import {
-  BadgeCheck,
-  BookOpen,
-  BriefcaseBusiness,
   Camera,
-  CalendarDays,
-  FileSignature,
-  HelpCircle,
-  Image,
-  Landmark,
-  LayoutDashboard,
-  Lightbulb,
-  MessageSquare,
-  type LucideIcon,
-  Map,
-  MapPinned,
   MoreHorizontal,
-  Sparkles,
-  Video,
   X,
 } from 'lucide-react';
-
-interface NavItem {
-  href: string;
-  label: string;
-  icon: LucideIcon;
-  match?: string[];
-}
-
-const primaryNavItems: NavItem[] = [
-  { href: '/', label: 'Today', icon: CalendarDays },
-  { href: '/maps', label: 'Map', icon: Map, match: ['/maps', '/mapping'] },
-  { href: '/proposals', label: 'Proposals', icon: FileSignature },
-  { href: '/work', label: 'Work', icon: BriefcaseBusiness },
-];
-
-const moreNavItems: NavItem[] = [
-  { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
-  { href: '/approvals', label: 'Approvals', icon: BadgeCheck },
-  { href: '/clarity', label: 'Clarity Gaps', icon: HelpCircle },
-  { href: '/hermes', label: 'Hermes', icon: Sparkles },
-  { href: '/vision', label: 'Vision', icon: Lightbulb },
-  { href: '/walkthroughs', label: 'Walkthroughs', icon: MessageSquare },
-  { href: '/images', label: 'Photos', icon: Image },
-  { href: '/videos', label: 'Media', icon: Video },
-  { href: '/mapping', label: 'Interactive Mapper', icon: MapPinned },
-  { href: '/research', label: 'Research', icon: BookOpen },
-  { href: '/busch-gardens', label: 'Busch Gardens', icon: Landmark },
-];
-
-function isActiveRoute(pathname: string, item: NavItem): boolean {
-  const routes = item.match ?? [item.href];
-
-  return routes.some((route) => {
-    if (route === '/') {
-      return pathname === '/';
-    }
-
-    return pathname === route || pathname.startsWith(`${route}/`);
-  });
-}
+import {
+  isActiveRoute,
+  moreMobileNavItems,
+  primaryMobileNavItems,
+  toneClasses,
+  type VisualLinkNavItem,
+} from '@/components/layout/visual-navigation-model';
 
 function getPrimaryItemClass(isActive: boolean): string {
   return `
@@ -85,20 +36,19 @@ function getPrimaryItemClass(isActive: boolean): string {
   `;
 }
 
-function getMenuItemClass(isActive: boolean): string {
+function getMenuItemClass(item: VisualLinkNavItem, isActive: boolean): string {
+  const tone = toneClasses(item.tone);
+
   return `
-    flex min-h-11 items-center gap-3.5 rounded-lg px-4 py-2 transition-all active:scale-95
-    ${isActive
-      ? 'bg-green-100 font-semibold text-green-900'
-      : 'text-gray-700 hover:bg-gray-100'
-    }
+    flex min-h-[6.4rem] flex-col justify-between rounded-lg border p-3 text-left shadow-sm transition-all active:scale-95
+    ${isActive ? tone.active : `${tone.tile} hover:-translate-y-0.5 hover:shadow-md`}
   `;
 }
 
 export function MobileNav() {
   const [menuOpen, setMenuOpen] = useState(false);
   const pathname = usePathname();
-  const primaryActive = primaryNavItems.some((item) => isActiveRoute(pathname, item));
+  const primaryActive = primaryMobileNavItems.some((item) => isActiveRoute(pathname, item));
   const moreActive = menuOpen || !primaryActive;
   const openCamera = () => {
     window.dispatchEvent(new Event('open-camera-capture'));
@@ -110,7 +60,7 @@ export function MobileNav() {
       {/* Persistent Bottom Navigation - Mobile Only */}
       <nav className="md:hidden fixed bottom-0 left-0 right-0 z-[2000] bg-gradient-to-r from-green-800 to-amber-700 border-t border-green-900 shadow-2xl pb-safe">
         <div className="grid h-16 grid-cols-5 items-center gap-1 px-2">
-          {primaryNavItems.map((item) => {
+          {primaryMobileNavItems.map((item) => {
             const Icon = item.icon;
             const isActive = isActiveRoute(pathname, item);
 
@@ -159,21 +109,29 @@ export function MobileNav() {
             </div>
 
             {/* Menu Items */}
-            <div className="flex-1 space-y-1 overflow-y-auto p-3">
-              {moreNavItems.map((item) => {
+            <div className="grid flex-1 grid-cols-2 gap-2.5 overflow-y-auto p-3">
+              {moreMobileNavItems.map((item) => {
                 const Icon = item.icon;
                 const isActive = isActiveRoute(pathname, item);
+                const iconTone = toneClasses(item.tone).icon;
 
                 return (
                   <Link
                     key={item.href}
                     href={item.href}
                     onClick={() => setMenuOpen(false)}
-                    className={getMenuItemClass(isActive)}
+                    className={getMenuItemClass(item, isActive)}
                     aria-current={isActive ? 'page' : undefined}
                   >
-                    <Icon className="h-5 w-5" />
-                    <span>{item.label}</span>
+                    <span className={`flex h-9 w-9 items-center justify-center rounded-md ${isActive ? 'bg-white/15 text-white' : iconTone}`}>
+                      <Icon className="h-5 w-5" />
+                    </span>
+                    <span>
+                      <span className="block text-sm font-black leading-tight">{item.label}</span>
+                      <span className={`mt-1 line-clamp-2 block text-[11px] leading-4 ${isActive ? 'text-white/75' : 'text-slate-600'}`}>
+                        {item.description}
+                      </span>
+                    </span>
                   </Link>
                 );
               })}
