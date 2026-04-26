@@ -15,7 +15,7 @@ export default function FloatingCameraButton({ onClick }: FloatingCameraButtonPr
     <button
       onClick={onClick}
       className="
-        fixed bottom-mobile-nav right-4 md:left-6 md:right-auto
+        fixed bottom-mobile-nav right-4 md:bottom-6 md:left-auto md:right-6
         w-14 h-14 sm:w-16 sm:h-16
         bg-gradient-to-br from-green-600 to-amber-600
         text-white
