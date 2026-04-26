@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { Navbar } from '@/components/layout/navbar';
+import MediaContextGallery from '@/components/media/MediaContextGallery';
 import {
   ArrowRight,
   AlertTriangle,
@@ -216,6 +217,17 @@ export default function WorkPage() {
                         <p className="mt-1 text-sm leading-6 text-gray-700">{zone.nextAction}</p>
                       </div>
                     )}
+
+                    <div className="mt-5 border-t border-slate-100 pt-4">
+                      <MediaContextGallery
+                        contextType="work-log"
+                        contextId={log.id}
+                        title="Work-log media"
+                        emptyMessage="No photos or videos are attached to this field note yet."
+                        compact
+                        limit={6}
+                      />
+                    </div>
                   </article>
                 );
               })}

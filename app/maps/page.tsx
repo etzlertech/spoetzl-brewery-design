@@ -8,6 +8,7 @@ import {
   MapPinned,
   Ruler,
 } from 'lucide-react';
+import MediaContextGallery from '@/components/media/MediaContextGallery';
 import { projectZones, clarityGaps, getToneClasses } from '@/lib/project-data';
 
 export default function MapsPage() {
@@ -150,6 +151,17 @@ export default function MapsPage() {
                   <Layers className="h-4 w-4 flex-none text-slate-500" />
                   <span>Owner: {zone.owner === 'both' ? 'Evergold and Spoetzl' : zone.owner}</span>
                 </div>
+              </div>
+
+              <div className="mt-5 border-t border-slate-100 pt-4">
+                <MediaContextGallery
+                  contextType="zone"
+                  contextId={zone.id}
+                  title="Zone media"
+                  emptyMessage="No media is attached to this zone yet."
+                  compact
+                  limit={4}
+                />
               </div>
             </article>
           ))}

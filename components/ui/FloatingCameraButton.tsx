@@ -7,8 +7,8 @@ interface FloatingCameraButtonProps {
 }
 
 /**
- * FloatingCameraButton - Persistent bottom-left camera button
- * Visible on all pages, opens camera capture modal
+ * FloatingCameraButton - Persistent camera/media button
+ * Visible on desktop, opens media capture modal
  */
 export default function FloatingCameraButton({ onClick }: FloatingCameraButtonProps) {
   return (
@@ -28,8 +28,8 @@ export default function FloatingCameraButton({ onClick }: FloatingCameraButtonPr
         hidden md:flex items-center justify-center
         group
       "
-      aria-label="Capture field photo"
-      title="Capture field photo"
+      aria-label="Capture field media"
+      title="Capture field media"
     >
       <Camera className="w-6 h-6 sm:w-7 sm:h-7 group-hover:rotate-12 transition-transform" />
     </button>

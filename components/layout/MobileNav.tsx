@@ -149,7 +149,7 @@ export function MobileNav() {
           onClick={() => setMenuOpen(false)}
         >
           <div
-            className="bottom-mobile-nav-sheet fixed left-0 right-0 max-h-[80vh] overflow-y-auto rounded-t-2xl bg-white shadow-2xl pb-safe"
+            className="bottom-mobile-nav-sheet fixed left-0 right-0 flex max-h-[80vh] flex-col overflow-hidden rounded-t-2xl bg-white shadow-2xl pb-safe"
             onClick={(event) => event.stopPropagation()}
           >
             {/* Menu Header */}
@@ -159,16 +159,7 @@ export function MobileNav() {
             </div>
 
             {/* Menu Items */}
-            <div className="space-y-1 p-3">
-              <button
-                type="button"
-                onClick={openCamera}
-                className={`${getMenuItemClass(false)} w-full`}
-              >
-                <Camera className="h-5 w-5" />
-                <span>Capture photo</span>
-              </button>
-
+            <div className="flex-1 space-y-1 overflow-y-auto p-3">
               {moreNavItems.map((item) => {
                 const Icon = item.icon;
                 const isActive = isActiveRoute(pathname, item);
@@ -186,6 +177,17 @@ export function MobileNav() {
                   </Link>
                 );
               })}
+            </div>
+
+            <div className="border-t border-gray-100 bg-white p-3 shadow-[0_-8px_20px_rgba(15,23,42,0.08)]">
+              <button
+                type="button"
+                onClick={openCamera}
+                className="flex min-h-12 w-full items-center justify-center gap-2 rounded-xl bg-green-800 px-4 py-3 text-sm font-bold text-white shadow-md transition active:scale-95"
+              >
+                <Camera className="h-5 w-5" />
+                <span>Capture media</span>
+              </button>
             </div>
           </div>
         </div>

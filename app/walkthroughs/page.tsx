@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { Navbar } from '@/components/layout/navbar';
+import MediaContextGallery from '@/components/media/MediaContextGallery';
 import {
   AlertCircle,
   CalendarCheck,
@@ -218,6 +219,17 @@ export default function WalkthroughsPage() {
                       </div>
                     </div>
                   ))}
+                </div>
+
+                <div className="mt-5 border-t border-slate-100 pt-4">
+                  <MediaContextGallery
+                    contextType="walkthrough"
+                    contextId={walkthrough.id}
+                    title="Walkthrough media"
+                    emptyMessage="No walkthrough clips or photos are attached yet."
+                    compact
+                    limit={6}
+                  />
                 </div>
               </article>
             ))}

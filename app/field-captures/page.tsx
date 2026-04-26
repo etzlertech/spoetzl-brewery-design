@@ -1,10 +1,10 @@
 import Link from 'next/link';
-import FieldCapturesGallery from '@/components/camera/FieldCapturesGallery';
+import MediaContextGallery from '@/components/media/MediaContextGallery';
 import { Camera, Lightbulb, MapPin } from 'lucide-react';
 
 export const metadata = {
   title: 'Field Captures | Spoetzl Brewery Landscape Design',
-  description: 'View all field captures and on-site photos captured during landscape design inspiration moments',
+  description: 'View all field captures, videos, and on-site media captured during landscape design moments',
 };
 
 export default function FieldCapturesPage() {
@@ -34,9 +34,9 @@ export default function FieldCapturesPage() {
             Capture Inspiration On-Site
           </h2>
           <p className="text-xl text-gray-700 max-w-3xl mx-auto">
-            Document landscape ideas, interesting plant combinations, hardscape details, and design
-            inspiration as you encounter them in the field. All photos captured via the camera
-            button are stored here for reference and intent analysis.
+            Document landscape ideas, walkthrough clips, plant combinations, hardscape details,
+            and design inspiration as they come up in the field. Captured media is stored with
+            context so it can support decisions later.
           </p>
         </div>
 
@@ -48,8 +48,8 @@ export default function FieldCapturesPage() {
               <h3 className="text-lg font-bold text-green-800">Quick Capture</h3>
             </div>
             <p className="text-gray-600 text-sm">
-              Use the floating camera button (bottom-left) to instantly capture photos from your
-              mobile device or upload from your gallery
+              Use Capture media to save photos or walkthrough clips from your mobile device
+              and attach them to the right project context
             </p>
           </div>
           <div className="bg-white rounded-lg p-6 shadow-md">
@@ -58,8 +58,8 @@ export default function FieldCapturesPage() {
               <h3 className="text-lg font-bold text-amber-800">Intent Analysis</h3>
             </div>
             <p className="text-gray-600 text-sm">
-              All captures are analyzed for design intent, helping identify patterns and
-              preferences in landscape inspiration
+              Captures carry stage, notes, and context so Hermes can later identify clarity gaps
+              and expectation mismatches
             </p>
           </div>
           <div className="bg-white rounded-lg p-6 shadow-md">
@@ -68,28 +68,31 @@ export default function FieldCapturesPage() {
               <h3 className="text-lg font-bold text-blue-800">Field Notes</h3>
             </div>
             <p className="text-gray-600 text-sm">
-              Document ideas, sketches, and visual notes while on-site at Spoetzl Brewery or
-              during research visits
+              Document ideas, sketches, zone evidence, and visual notes while on-site at
+              Spoetzl Brewery or during research visits
             </p>
           </div>
         </div>
 
         {/* Image Gallery */}
         <div className="bg-white rounded-xl shadow-lg p-8">
-          <h2 className="text-2xl font-bold text-green-900 mb-6">All Captures</h2>
-          <FieldCapturesGallery />
+          <MediaContextGallery
+            title="All field media"
+            emptyMessage="No field media has been captured yet."
+            showFilters
+          />
         </div>
 
         {/* Call to Action */}
         <div className="mt-12 bg-gradient-to-r from-green-700 to-amber-700 rounded-xl p-8 text-center text-white">
           <h3 className="text-2xl font-bold mb-4">Start Capturing</h3>
           <p className="mb-6 text-lg">
-            Look for the camera button in the bottom-left corner of any page to capture your next
-            inspiration moment
+            Look for Capture media on desktop or under More on mobile to save the next useful
+            field observation
           </p>
           <div className="flex items-center justify-center gap-2">
             <Camera className="w-8 h-8" />
-            <p className="text-sm opacity-90">Always available • Instant upload • Auto-compressed</p>
+            <p className="text-sm opacity-90">Photos • Videos • Context notes • Shared gallery</p>
           </div>
         </div>
       </main>

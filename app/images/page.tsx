@@ -46,7 +46,7 @@ export default function ImagesPage() {
             </h2>
           </div>
           <p className="text-gray-600 mb-6">
-            Photos captured on-site using the camera button for real-time inspiration and documentation
+            Photos captured on-site using Capture media for real-time inspiration and documentation
           </p>
           <FieldCapturesGallery />
         </div>

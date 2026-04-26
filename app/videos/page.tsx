@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { Navbar } from '@/components/layout/navbar';
+import MediaContextGallery from '@/components/media/MediaContextGallery';
 import {
   ArrowRight,
   Camera,
@@ -125,6 +126,16 @@ export default function VideosPage() {
               </div>
             );
           })}
+        </section>
+
+        <section className="mb-10 rounded-xl border border-gray-200 bg-white p-5 shadow-lg">
+          <MediaContextGallery
+            kind="video"
+            title="Uploaded walkthrough videos"
+            emptyMessage="No videos have been uploaded yet. Capture media and choose a walkthrough context to build this packet."
+            showFilters
+            limit={12}
+          />
         </section>
 
         <section className="mb-10 grid gap-4 lg:grid-cols-[minmax(0,1.45fr)_minmax(320px,0.85fr)]">

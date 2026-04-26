@@ -12,6 +12,7 @@ import {
   TriangleAlert,
 } from 'lucide-react';
 import { Navbar } from '@/components/layout/navbar';
+import MediaContextGallery from '@/components/media/MediaContextGallery';
 import {
   approvalItems,
   clarityGaps,
@@ -234,6 +235,17 @@ export default async function ProposalDetailPage({
               </div>
             ) : null}
           </section>
+        </section>
+
+        <section className="mt-5 rounded-lg border border-green-100 bg-white p-5 shadow-sm">
+          <MediaContextGallery
+            contextType="proposal"
+            contextId={proposal.id}
+            title="Proposal media packet"
+            emptyMessage="No proposal photos, videos, or visual proof have been attached yet."
+            showFilters
+            limit={12}
+          />
         </section>
       </main>
     </div>
