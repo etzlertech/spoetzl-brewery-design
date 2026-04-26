@@ -28,7 +28,17 @@ export async function POST(request: NextRequest) {
     const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
     // Parse FormData
-    const formData = await request.formData();
+    let formData: FormData;
+
+    try {
+      formData = await request.formData();
+    } catch {
+      return NextResponse.json(
+        { error: 'Invalid upload request. Please submit image form data.' },
+        { status: 400 }
+      );
+    }
+
     const file = formData.get('image') as File | null;
 
     if (!file) {
