@@ -5,6 +5,15 @@ import { useState } from "react"
 
 export function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const navItems = [
+    { href: '/', label: 'Today' },
+    { href: '/maps', label: 'Map' },
+    { href: '/proposals', label: 'Proposals' },
+    { href: '/work', label: 'Work' },
+    { href: '/clarity', label: 'Clarity' },
+    { href: '/hermes', label: 'Hermes' },
+    { href: '/images', label: 'Photos' },
+  ]
 
   return (
     <nav className="sticky top-0 z-50 bg-gradient-to-r from-green-800 to-amber-700 shadow-lg">
@@ -14,7 +23,7 @@ export function Navbar() {
           <div className="flex items-center">
             <Link href="/" className="flex items-center space-x-2">
               <span className="text-xl font-bold text-white">
-                Spoetzl Brewery Design
+                Spoetzl x Evergold
               </span>
             </Link>
           </div>
@@ -22,48 +31,15 @@ export function Navbar() {
           {/* Desktop Navigation */}
           <div className="hidden md:block">
             <div className="ml-10 flex items-center space-x-4">
-              <Link
-                href="/dashboard"
-                className="rounded-md px-3 py-2 text-sm font-medium text-white hover:bg-green-700 transition"
-              >
-                Dashboard
-              </Link>
-              <Link
-                href="/images"
-                className="rounded-md px-3 py-2 text-sm font-medium text-white hover:bg-green-700 transition"
-              >
-                Images
-              </Link>
-              <Link
-                href="/videos"
-                className="rounded-md px-3 py-2 text-sm font-medium text-white hover:bg-green-700 transition"
-              >
-                Videos
-              </Link>
-              <Link
-                href="/maps"
-                className="rounded-md px-3 py-2 text-sm font-medium text-white hover:bg-green-700 transition"
-              >
-                Maps
-              </Link>
-              <Link
-                href="/enhancements"
-                className="rounded-md px-3 py-2 text-sm font-medium text-white hover:bg-green-700 transition"
-              >
-                Enhancements
-              </Link>
-              <Link
-                href="/busch-gardens"
-                className="rounded-md px-3 py-2 text-sm font-medium text-white hover:bg-green-700 transition"
-              >
-                Busch Gardens
-              </Link>
-              <Link
-                href="/skills"
-                className="rounded-md px-3 py-2 text-sm font-medium text-white hover:bg-green-700 transition"
-              >
-                Skills
-              </Link>
+              {navItems.map((item) => (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className="rounded-md px-3 py-2 text-sm font-medium text-white hover:bg-green-700 transition"
+                >
+                  {item.label}
+                </Link>
+              ))}
             </div>
           </div>
 
@@ -104,55 +80,16 @@ export function Navbar() {
       {mobileMenuOpen && (
         <div className="md:hidden">
           <div className="space-y-1 px-2 pb-3 pt-2">
-            <Link
-              href="/dashboard"
-              className="block rounded-md px-3 py-2 text-base font-medium text-white hover:bg-green-700"
-              onClick={() => setMobileMenuOpen(false)}
-            >
-              Dashboard
-            </Link>
-            <Link
-              href="/images"
-              className="block rounded-md px-3 py-2 text-base font-medium text-white hover:bg-green-700"
-              onClick={() => setMobileMenuOpen(false)}
-            >
-              Images
-            </Link>
-            <Link
-              href="/videos"
-              className="block rounded-md px-3 py-2 text-base font-medium text-white hover:bg-green-700"
-              onClick={() => setMobileMenuOpen(false)}
-            >
-              Videos
-            </Link>
-            <Link
-              href="/maps"
-              className="block rounded-md px-3 py-2 text-base font-medium text-white hover:bg-green-700"
-              onClick={() => setMobileMenuOpen(false)}
-            >
-              Maps
-            </Link>
-            <Link
-              href="/enhancements"
-              className="block rounded-md px-3 py-2 text-base font-medium text-white hover:bg-green-700"
-              onClick={() => setMobileMenuOpen(false)}
-            >
-              Enhancements
-            </Link>
-            <Link
-              href="/busch-gardens"
-              className="block rounded-md px-3 py-2 text-base font-medium text-white hover:bg-green-700"
-              onClick={() => setMobileMenuOpen(false)}
-            >
-              Busch Gardens
-            </Link>
-            <Link
-              href="/skills"
-              className="block rounded-md px-3 py-2 text-base font-medium text-white hover:bg-green-700"
-              onClick={() => setMobileMenuOpen(false)}
-            >
-              Skills
-            </Link>
+            {navItems.map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                className="block rounded-md px-3 py-2 text-base font-medium text-white hover:bg-green-700"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                {item.label}
+              </Link>
+            ))}
           </div>
         </div>
       )}

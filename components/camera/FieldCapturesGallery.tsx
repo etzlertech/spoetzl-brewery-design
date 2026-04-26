@@ -45,7 +45,7 @@ export default function FieldCapturesGallery() {
           .map((file) => ({
             name: file.name,
             url: `https://armklbqsjcmrhqljmacz.supabase.co/storage/v1/object/public/images/camera-captures/${file.name}`,
-            created_at: file.created_at,
+            created_at: file.created_at ?? new Date().toISOString(),
           }));
 
         setImages(imageUrls);

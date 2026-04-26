@@ -5,12 +5,6 @@ import { createClient } from '@supabase/supabase-js';
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://armklbqsjcmrhqljmacz.supabase.co';
 const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
 
-if (!supabaseServiceKey) {
-  throw new Error('SUPABASE_SERVICE_ROLE_KEY is not configured in environment variables');
-}
-
-const supabase = createClient(supabaseUrl, supabaseServiceKey);
-
 // Constants
 const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
 
@@ -24,6 +18,15 @@ const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
  */
 export async function POST(request: NextRequest) {
   try {
+    if (!supabaseServiceKey) {
+      return NextResponse.json(
+        { error: 'Photo upload is not configured. Missing SUPABASE_SERVICE_ROLE_KEY.' },
+        { status: 503 }
+      );
+    }
+
+    const supabase = createClient(supabaseUrl, supabaseServiceKey);
+
     // Parse FormData
     const formData = await request.formData();
     const file = formData.get('image') as File | null;
@@ -71,7 +74,7 @@ export async function POST(request: NextRequest) {
     const buffer = new Uint8Array(arrayBuffer);
 
     // Upload to Supabase storage
-    const { data, error } = await supabase.storage
+    const { error } = await supabase.storage
       .from('images')
       .upload(storagePath, buffer, {
         contentType: file.type,

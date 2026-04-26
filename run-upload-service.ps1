@@ -1,5 +1,9 @@
-# Use service_role key to bypass RLS policies
-$env:SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFybWtsYnFzamNtcmhxbGptYWN6Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3MjkyMjEwMywiZXhwIjoyMDg4NDk4MTAzfQ.RpZROy8PtrDK0XdzBlCLid7jMCsnhvQj8_aHPfuN_SE"
+# Set SUPABASE_SERVICE_ROLE_KEY in the shell before running this helper.
+# Service-role keys must never be committed to source control.
+if (-not $env:SUPABASE_SERVICE_ROLE_KEY) {
+    Write-Error "Missing SUPABASE_SERVICE_ROLE_KEY. Set it in your shell or use run-upload.ps1 with a clipboard key."
+    exit 1
+}
 
 # Navigate to directory and run upload script
 Set-Location "C:\Users\TravisEtzler\Documents\GitHub\Spoetzl Brewery Landscape Design system\spoetzl-brewery-app"

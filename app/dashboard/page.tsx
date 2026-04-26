@@ -1,209 +1,254 @@
-import Link from "next/link"
-import { Navbar } from "@/components/layout/navbar"
+import Link from 'next/link';
+import {
+  ArrowRight,
+  Brain,
+  CheckCircle2,
+  ClipboardList,
+  FileSignature,
+  MapPinned,
+  NotebookTabs,
+  ShieldAlert,
+} from 'lucide-react';
+import { Navbar } from '@/components/layout/navbar';
+import {
+  clarityGaps,
+  projectMetrics,
+  projectOverview,
+  projectZones,
+  proposals,
+  timelineEvents,
+  workLogs,
+  getToneClasses,
+} from '@/lib/project-data';
+
+const sections = [
+  {
+    href: '/vision',
+    label: 'Vision',
+    detail: 'North star, constraints, design principles, and acceptance criteria.',
+    icon: NotebookTabs,
+  },
+  {
+    href: '/maps',
+    label: 'Zones',
+    detail: 'Every bed and property area connected to scope, photos, logs, and questions.',
+    icon: MapPinned,
+  },
+  {
+    href: '/proposals',
+    label: 'Proposals',
+    detail: 'Versioned estimates, assumptions, line items, and signoff language.',
+    icon: FileSignature,
+  },
+  {
+    href: '/hermes',
+    label: 'Hermes',
+    detail: 'Daily alignment intelligence and memory-backed clarity prompts.',
+    icon: Brain,
+  },
+];
 
 export default function DashboardPage() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-green-50 via-amber-50 to-green-100">
+    <div className="min-h-screen bg-[#f7f4ec] pb-24 text-slate-950 md:pb-0">
       <Navbar />
 
-      <main className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
-        {/* Header */}
-        <div className="mb-8">
-          <h1 className="text-4xl font-bold text-green-900">Dashboard</h1>
-          <p className="mt-2 text-gray-700">
-            Welcome to the Spoetzl Brewery Landscape Design System
-          </p>
-        </div>
-
-        {/* Quick Stats */}
-        <div className="mb-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-          <div className="rounded-xl bg-white p-6 shadow-lg">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm font-medium text-gray-600">Total Images</p>
-                <p className="mt-2 text-3xl font-bold text-blue-600">0</p>
-              </div>
-              <div className="rounded-full bg-blue-100 p-3">
-                <svg className="h-8 w-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                </svg>
-              </div>
-            </div>
-          </div>
-
-          <div className="rounded-xl bg-white p-6 shadow-lg">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm font-medium text-gray-600">Total Videos</p>
-                <p className="mt-2 text-3xl font-bold text-red-600">0</p>
-              </div>
-              <div className="rounded-full bg-red-100 p-3">
-                <svg className="h-8 w-8 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
-                </svg>
-              </div>
-            </div>
-          </div>
-
-          <div className="rounded-xl bg-white p-6 shadow-lg">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm font-medium text-gray-600">Enhancements</p>
-                <p className="mt-2 text-3xl font-bold text-purple-600">0</p>
-              </div>
-              <div className="rounded-full bg-purple-100 p-3">
-                <svg className="h-8 w-8 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
-                </svg>
-              </div>
-            </div>
-          </div>
-
-          <div className="rounded-xl bg-white p-6 shadow-lg">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm font-medium text-gray-600">Research Docs</p>
-                <p className="mt-2 text-3xl font-bold text-green-600">13</p>
-              </div>
-              <div className="rounded-full bg-green-100 p-3">
-                <svg className="h-8 w-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                </svg>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Research Center - Prominent Feature */}
-        <div className="mb-8 rounded-xl bg-gradient-to-r from-blue-600 to-purple-700 p-8 text-white shadow-xl">
-          <div className="flex items-center justify-between">
-            <div className="flex-1">
-              <div className="mb-2 flex items-center gap-3">
-                <span className="text-4xl">🔬</span>
-                <h2 className="text-3xl font-bold">Research Center</h2>
-              </div>
-              <p className="mb-4 text-lg text-blue-50">
-                Access comprehensive landscape research: 13 documents, 100K+ words, 23 images
-              </p>
-              <div className="mb-6 flex flex-wrap gap-4">
-                <div className="rounded-lg bg-white/20 px-4 py-2 backdrop-blur-sm">
-                  <p className="text-sm text-blue-100">Busch Gardens Design</p>
-                  <p className="text-2xl font-bold">6 Docs</p>
-                </div>
-                <div className="rounded-lg bg-white/20 px-4 py-2 backdrop-blur-sm">
-                  <p className="text-sm text-blue-100">Technical Research</p>
-                  <p className="text-2xl font-bold">7 Docs</p>
-                </div>
-                <div className="rounded-lg bg-white/20 px-4 py-2 backdrop-blur-sm">
-                  <p className="text-sm text-blue-100">Research Hours</p>
-                  <p className="text-2xl font-bold">120+</p>
-                </div>
-              </div>
-              <Link
-                href="/research"
-                className="inline-flex items-center rounded-lg bg-white px-6 py-3 font-semibold text-purple-700 transition hover:bg-blue-50"
-              >
-                Explore Research Center
-                <svg className="ml-2 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
-                </svg>
-              </Link>
-            </div>
-          </div>
-        </div>
-
-        {/* Main Sections Grid */}
-        <div className="grid gap-6 lg:grid-cols-2">
-          {/* Media Library */}
-          <div className="rounded-xl bg-white p-6 shadow-lg">
-            <h2 className="mb-4 text-2xl font-bold text-gray-900">Media Library</h2>
-            <div className="space-y-3">
-              <Link
-                href="/images"
-                className="flex items-center justify-between rounded-lg bg-gradient-to-r from-blue-500 to-blue-600 p-4 text-white transition hover:from-blue-600 hover:to-blue-700"
-              >
-                <span className="font-semibold">Image Gallery</span>
-                <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                </svg>
-              </Link>
-
-              <Link
-                href="/videos"
-                className="flex items-center justify-between rounded-lg bg-gradient-to-r from-red-500 to-red-600 p-4 text-white transition hover:from-red-600 hover:to-red-700"
-              >
-                <span className="font-semibold">Video Library</span>
-                <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                </svg>
-              </Link>
-
-              <Link
-                href="/maps"
-                className="flex items-center justify-between rounded-lg bg-gradient-to-r from-green-500 to-green-600 p-4 text-white transition hover:from-green-600 hover:to-green-700"
-              >
-                <span className="font-semibold">Maps & Layouts</span>
-                <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                </svg>
-              </Link>
-            </div>
-          </div>
-
-          {/* Project Management */}
-          <div className="rounded-xl bg-white p-6 shadow-lg">
-            <h2 className="mb-4 text-2xl font-bold text-gray-900">Project Management</h2>
-            <div className="space-y-3">
-              <Link
-                href="/enhancements"
-                className="flex items-center justify-between rounded-lg bg-gradient-to-r from-purple-500 to-purple-600 p-4 text-white transition hover:from-purple-600 hover:to-purple-700"
-              >
-                <span className="font-semibold">Enhancement Proposals</span>
-                <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                </svg>
-              </Link>
-
-              <Link
-                href="/specifications"
-                className="flex items-center justify-between rounded-lg bg-gradient-to-r from-amber-500 to-amber-600 p-4 text-white transition hover:from-amber-600 hover:to-amber-700"
-              >
-                <span className="font-semibold">Design Specifications</span>
-                <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                </svg>
-              </Link>
-
-              <Link
-                href="/plans"
-                className="flex items-center justify-between rounded-lg bg-gradient-to-r from-teal-500 to-teal-600 p-4 text-white transition hover:from-teal-600 hover:to-teal-700"
-              >
-                <span className="font-semibold">Project Plans</span>
-                <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                </svg>
-              </Link>
-            </div>
-          </div>
-
-          {/* Busch Gardens Inspiration */}
-          <div className="rounded-xl bg-gradient-to-br from-purple-500 to-indigo-600 p-6 text-white shadow-lg lg:col-span-2">
-            <h2 className="mb-4 text-2xl font-bold">Busch Gardens Williamsburg Inspiration</h2>
-            <p className="mb-6 text-purple-100">
-              Explore world-class theme park design elements to inspire Spoetzl Brewery enhancements
+      <main className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
+        <section className="grid gap-5 lg:grid-cols-[1.2fr_0.8fr]">
+          <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm lg:p-8">
+            <p className="text-sm font-black uppercase tracking-wide text-emerald-800">
+              Shared project truth
             </p>
+            <h1 className="mt-2 max-w-4xl text-4xl font-black leading-tight text-emerald-950 lg:text-5xl">
+              {projectOverview.client} and {projectOverview.contractor} need one visible source of alignment.
+            </h1>
+            <p className="mt-4 max-w-3xl text-lg leading-8 text-slate-700">
+              This dashboard turns vision, mapped zones, proposals, approvals,
+              field work, and clarity questions into one readable operating surface.
+            </p>
+
+            <div className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+              {projectMetrics.map((metric) => (
+                <div key={metric.label} className={`rounded-2xl border p-4 ${getToneClasses(metric.tone)}`}>
+                  <p className="text-3xl font-black">{metric.value}</p>
+                  <p className="mt-1 text-sm font-black">{metric.label}</p>
+                  <p className="mt-1 text-xs leading-5 opacity-80">{metric.detail}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <aside className="rounded-3xl border border-slate-200 bg-slate-950 p-6 text-white shadow-sm">
+            <div className="flex items-center gap-3">
+              <ShieldAlert className="h-8 w-8 text-amber-300" />
+              <div>
+                <p className="text-sm font-bold text-white/65">Needs attention</p>
+                <h2 className="text-2xl font-black">Before phase one can lock</h2>
+              </div>
+            </div>
+            <div className="mt-5 space-y-3">
+              {clarityGaps.slice(0, 3).map((gap) => (
+                <Link
+                  key={gap.id}
+                  href="/clarity"
+                  className="block rounded-2xl border border-white/10 bg-white/10 p-4 transition hover:bg-white/15"
+                >
+                  <div className="flex items-start justify-between gap-3">
+                    <p className="font-bold">{gap.title}</p>
+                    <span className="rounded-full bg-amber-300 px-2 py-1 text-[11px] font-black text-slate-950">
+                      {gap.priority}
+                    </span>
+                  </div>
+                  <p className="mt-1 text-sm leading-5 text-white/70">{gap.zone}</p>
+                </Link>
+              ))}
+            </div>
             <Link
-              href="/busch-gardens"
-              className="inline-flex items-center rounded-lg bg-white px-6 py-3 font-semibold text-purple-600 transition hover:bg-purple-50"
+              href="/clarity"
+              className="mt-5 inline-flex items-center gap-2 text-sm font-black text-amber-200"
             >
-              Explore Inspiration Section
-              <svg className="ml-2 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
-              </svg>
+              Resolve clarity gaps <ArrowRight className="h-4 w-4" />
+            </Link>
+          </aside>
+        </section>
+
+        <section className="mt-5 grid gap-5 lg:grid-cols-4">
+          {sections.map((section) => {
+            const Icon = section.icon;
+            return (
+              <Link
+                key={section.href}
+                href={section.href}
+                className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:border-emerald-300 hover:shadow-md"
+              >
+                <div className="flex items-start justify-between gap-4">
+                  <Icon className="h-7 w-7 text-emerald-800" />
+                  <ArrowRight className="h-5 w-5 text-slate-400" />
+                </div>
+                <p className="mt-5 text-xl font-black">{section.label}</p>
+                <p className="mt-2 text-sm leading-6 text-slate-600">{section.detail}</p>
+              </Link>
+            );
+          })}
+        </section>
+
+        <section className="mt-5 grid gap-5 lg:grid-cols-[0.9fr_1.1fr]">
+          <div className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-black uppercase tracking-wide text-blue-800">
+                  Proposal status
+                </p>
+                <h2 className="mt-1 text-2xl font-black">Versioned work, visible assumptions</h2>
+              </div>
+              <FileSignature className="h-8 w-8 text-blue-700" />
+            </div>
+            <div className="mt-5 space-y-3">
+              {proposals.map((proposal) => (
+                <Link
+                  key={proposal.id}
+                  href="/proposals"
+                  className="block rounded-2xl border border-slate-200 p-4 transition hover:border-blue-300 hover:bg-blue-50"
+                >
+                  <div className="flex items-start justify-between gap-4">
+                    <div>
+                      <p className="font-black">{proposal.title}</p>
+                      <p className="mt-1 text-sm text-slate-600">
+                        {proposal.version} - {proposal.value}
+                      </p>
+                    </div>
+                    <span className="rounded-full border border-blue-200 bg-blue-50 px-2.5 py-1 text-xs font-black text-blue-900">
+                      {proposal.status}
+                    </span>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </div>
+
+          <div className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-black uppercase tracking-wide text-emerald-800">
+                  Work and timeline
+                </p>
+                <h2 className="mt-1 text-2xl font-black">What happened, what is next</h2>
+              </div>
+              <ClipboardList className="h-8 w-8 text-emerald-700" />
+            </div>
+
+            <div className="mt-5 grid gap-4 lg:grid-cols-2">
+              <div className="space-y-3">
+                {workLogs.map((log) => (
+                  <Link
+                    key={log.id}
+                    href="/work"
+                    className="block rounded-2xl border border-slate-200 p-4 transition hover:border-emerald-300 hover:bg-emerald-50"
+                  >
+                    <p className="text-xs font-black uppercase tracking-wide text-slate-500">
+                      {log.date} - {log.zone}
+                    </p>
+                    <p className="mt-1 font-black">{log.title}</p>
+                    <p className="mt-1 line-clamp-2 text-sm leading-5 text-slate-600">
+                      {log.summary}
+                    </p>
+                  </Link>
+                ))}
+              </div>
+
+              <div className="rounded-2xl bg-slate-50 p-4">
+                {timelineEvents.slice(0, 4).map((event) => (
+                  <div key={`${event.date}-${event.title}`} className="flex gap-3 pb-4 last:pb-0">
+                    <CheckCircle2
+                      className={`mt-0.5 h-5 w-5 flex-none ${
+                        event.status === 'Done' ? 'text-emerald-700' : 'text-slate-400'
+                      }`}
+                    />
+                    <div>
+                      <p className="text-xs font-black uppercase tracking-wide text-slate-500">
+                        {event.date}
+                      </p>
+                      <p className="font-bold">{event.title}</p>
+                      <p className="mt-1 text-sm leading-5 text-slate-600">{event.detail}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section className="mt-5 rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
+          <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
+            <div>
+              <p className="text-sm font-black uppercase tracking-wide text-emerald-800">
+                Zone inventory
+              </p>
+              <h2 className="mt-1 text-2xl font-black">Mapped areas that carry the project</h2>
+            </div>
+            <Link
+              href="/maps"
+              className="inline-flex items-center justify-center gap-2 rounded-full bg-emerald-800 px-5 py-3 text-sm font-black text-white"
+            >
+              Open zone board <ArrowRight className="h-4 w-4" />
             </Link>
           </div>
-        </div>
+
+          <div className="mt-5 grid gap-3 md:grid-cols-2 xl:grid-cols-3">
+            {projectZones.map((zone) => (
+              <div key={zone.id} className="rounded-2xl border border-slate-200 p-4">
+                <div className="flex items-start justify-between gap-3">
+                  <p className="font-black">{zone.name}</p>
+                  <span className={`rounded-full border px-2 py-1 text-[11px] font-black ${getToneClasses(zone.tone)}`}>
+                    {zone.status}
+                  </span>
+                </div>
+                <p className="mt-2 text-sm leading-5 text-slate-600">{zone.nextAction}</p>
+              </div>
+            ))}
+          </div>
+        </section>
       </main>
     </div>
-  )
+  );
 }

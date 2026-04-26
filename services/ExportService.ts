@@ -7,7 +7,7 @@
  * - Download as .geojson file
  */
 
-import type { Zone, Layer, AppState, Result } from '@/models/mapping/types';
+import type { Zone, Layer, AppState, Result, LonLatTuple } from '@/models/mapping/types';
 import type { Feature, FeatureCollection, Polygon } from 'geojson';
 
 // ============================================================================
@@ -61,12 +61,13 @@ class ExportServiceClass {
     // Convert zones to GeoJSON features
     const features: Feature<Polygon, ZoneProperties>[] = zones.map(zone => {
       const layer = layerMap.get(zone.layerId);
+      const exteriorRing = this.getClosedLinearRing(zone.coordinates);
 
       return {
         type: 'Feature',
         geometry: {
           type: 'Polygon',
-          coordinates: [zone.coordinates] // GeoJSON Polygon requires array of rings
+          coordinates: [exteriorRing] // GeoJSON Polygon requires closed linear rings
         },
         properties: {
           id: zone.id,
@@ -170,6 +171,32 @@ class ExportServiceClass {
         error: ExportError.EXPORT_FAILED
       };
     }
+  }
+
+  /**
+   * Return an RFC 7946-compliant closed ring without mutating stored zone data.
+   */
+  private getClosedLinearRing(coordinates: LonLatTuple[]): LonLatTuple[] {
+    const ring = coordinates.map(([lon, lat]) => [lon, lat] as LonLatTuple);
+
+    if (ring.length === 0) {
+      return ring;
+    }
+
+    const first = ring[0];
+    const last = ring[ring.length - 1];
+
+    if (this.areSamePosition(first, last)) {
+      return ring;
+    }
+
+    const closingPoint: LonLatTuple = [first[0], first[1]];
+
+    return [...ring, closingPoint];
+  }
+
+  private areSamePosition(first: LonLatTuple, second: LonLatTuple): boolean {
+    return first[0] === second[0] && first[1] === second[1];
   }
 
   /**

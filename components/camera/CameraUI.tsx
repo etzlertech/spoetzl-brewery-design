@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import FloatingCameraButton from '@/components/ui/FloatingCameraButton';
 import CameraCapture from '@/components/camera/CameraCapture';
 
@@ -10,6 +10,14 @@ import CameraCapture from '@/components/camera/CameraCapture';
  */
 export default function CameraUI() {
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  useEffect(() => {
+    const openCamera = () => setIsModalOpen(true);
+
+    window.addEventListener('open-camera-capture', openCamera);
+
+    return () => window.removeEventListener('open-camera-capture', openCamera);
+  }, []);
 
   return (
     <>
