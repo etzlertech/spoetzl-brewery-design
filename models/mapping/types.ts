@@ -328,12 +328,12 @@ export const PROPERTY_CONFIGS: Record<'spoetzl' | 'busch', PropertyConfig> = {
   spoetzl: {
     id: 'spoetzl',
     name: 'Spoetzl Brewery',
-    center: [-97.1772, 29.4241],  // Shiner, TX
+    center: [-97.1671258, 29.434258], // Spoetzl Brewery campus, Shiner, TX
     bounds: {
-      north: 29.4300,
-      south: 29.4180,
-      east: -97.1700,
-      west: -97.1850
+      north: 29.4365,
+      south: 29.4310,
+      east: -97.1640,
+      west: -97.1710
     },
     defaultZoom: 18
   },
