@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Image from 'next/image';
 import {
   ArrowRight,
   Brain,
@@ -7,8 +8,6 @@ import {
   ClipboardCheck,
   HelpCircle,
   Map,
-  MessageSquare,
-  PenLine,
   ShieldCheck,
   Sparkles,
 } from 'lucide-react';
@@ -21,12 +20,12 @@ import {
   timelineEvents,
   getToneClasses,
 } from '@/lib/project-data';
-import VisualAssetStrip from '@/components/media/VisualAssetStrip';
 import VisualAssetThumbnail from '@/components/media/VisualAssetThumbnail';
 import {
   getClarityGapVisualProof,
   getProjectVisualProof,
   getZoneVisualProof,
+  type VisualProofAsset,
 } from '@/lib/visual-proof';
 
 const highPriorityGaps = clarityGaps.filter((gap) => gap.priority === 'High');
@@ -56,6 +55,13 @@ const quickActions = [
     className: 'bg-amber-600 text-white',
   },
   {
+    href: '/research',
+    label: 'Inspiration Library',
+    detail: 'Open Busch Gardens articles, adaptation notes, and visual references.',
+    icon: Sparkles,
+    className: 'bg-emerald-900 text-white',
+  },
+  {
     href: '/hermes',
     label: 'Ask Hermes',
     detail: 'Daily relationship memory, source-cited observations, and clarity prompts.',
@@ -64,609 +70,563 @@ const quickActions = [
   },
 ];
 
-function Pin({ className = 'bg-emerald-500' }: { className?: string }) {
+type QuickAction = (typeof quickActions)[number];
+
+function actionProofAsset(action: QuickAction, index: number): VisualProofAsset {
+  if (action.href === '/mapping') {
+    return getZoneVisualProof(activeZones[0] ?? projectZones[0], 1)[0];
+  }
+
+  if (action.href === '/clarity') {
+    return getClarityGapVisualProof(highPriorityGaps[0] ?? clarityGaps[0], 1)[0];
+  }
+
+  return projectProofAssets[index % projectProofAssets.length];
+}
+
+function ProofImageTile({
+  asset,
+  href,
+  className = '',
+  priority = false,
+  children,
+}: {
+  asset: VisualProofAsset;
+  href: string;
+  className?: string;
+  priority?: boolean;
+  children?: React.ReactNode;
+}) {
   return (
-    <span
-      aria-hidden="true"
-      className={`absolute left-1/2 top-3 z-10 h-3.5 w-3.5 -translate-x-1/2 rounded-full border border-white/70 shadow-md ring-2 ring-black/10 ${className}`}
-    />
+    <Link
+      href={href}
+      className={`group relative block overflow-hidden rounded-lg bg-slate-200 ${className}`}
+      aria-label={asset.title}
+    >
+      <Image
+        src={asset.src}
+        alt={asset.alt}
+        fill
+        priority={priority}
+        sizes="(max-width: 1024px) 100vw, 520px"
+        className="object-cover transition duration-300 group-hover:scale-[1.035]"
+      />
+      <div className="absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-slate-950/78 via-slate-950/28 to-transparent" />
+      {children}
+    </Link>
+  );
+}
+
+function MetricTile({ metric }: { metric: (typeof projectMetrics)[number] }) {
+  return (
+    <div className={`rounded-lg border px-4 py-3 ${getToneClasses(metric.tone)}`}>
+      <p className="text-3xl font-black leading-none">{metric.value}</p>
+      <p className="mt-1 text-[11px] font-black uppercase leading-3 tracking-wide">
+        {metric.label}
+      </p>
+    </div>
+  );
+}
+
+function ActionTile({ action, index }: { action: QuickAction; index: number }) {
+  const Icon = action.icon;
+  const asset = actionProofAsset(action, index);
+
+  return (
+    <Link
+      href={action.href}
+      className={`group relative block h-full min-h-0 overflow-hidden rounded-lg border border-slate-200 bg-slate-200 shadow-sm transition hover:-translate-y-0.5 hover:border-emerald-300 hover:shadow-md ${
+        index === quickActions.length - 1 ? 'col-span-2' : ''
+      }`}
+    >
+      <Image
+        src={asset.src}
+        alt={asset.alt}
+        fill
+        sizes="260px"
+        className="object-cover transition duration-300 group-hover:scale-105"
+      />
+      <div className="absolute inset-0 bg-gradient-to-t from-slate-950/82 via-slate-950/20 to-transparent" />
+      <span className={`absolute left-3 top-3 flex h-9 w-9 items-center justify-center rounded-lg ${action.className}`}>
+        <Icon className="h-[18px] w-[18px]" />
+      </span>
+      <span className="absolute inset-x-0 bottom-0 min-w-0 p-3 text-white">
+        <span className="block text-base font-black leading-tight">{action.label}</span>
+        <span className="mt-1 block truncate text-xs font-semibold text-white/75">
+          {action.detail}
+        </span>
+      </span>
+    </Link>
+  );
+}
+
+function MobileActionTile({ action, index }: { action: QuickAction; index: number }) {
+  const Icon = action.icon;
+  const asset = actionProofAsset(action, index);
+
+  return (
+    <Link
+      href={action.href}
+      className="group overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm transition active:scale-[0.98]"
+    >
+      <div className="relative aspect-square bg-slate-100">
+        <Image
+          src={asset.src}
+          alt={asset.alt}
+          fill
+          sizes="45vw"
+          className="object-cover transition duration-300 group-hover:scale-105"
+        />
+        <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-slate-950/70 to-transparent" />
+        <span className={`absolute left-2 top-2 flex h-9 w-9 items-center justify-center rounded-lg ${action.className}`}>
+          <Icon className="h-[18px] w-[18px]" />
+        </span>
+        <span className="absolute inset-x-0 bottom-0 p-3 text-white">
+          <span className="block text-sm font-black leading-tight">{action.label}</span>
+        </span>
+      </div>
+    </Link>
   );
 }
 
 function DesktopHome() {
   const nextEvent = timelineEvents.find((event) => event.status !== 'Done') ?? timelineEvents[0];
+  const primaryGap = highPriorityGaps[0] ?? clarityGaps[0];
+  const zoneTiles = activeZones.slice(0, 4);
 
   return (
     <main
-      className="hidden h-screen overflow-hidden text-slate-950 lg:block"
-      style={{
-        backgroundColor: '#8a5a2f',
-        backgroundImage:
-          'linear-gradient(90deg, rgba(53,30,13,.28) 0 1px, transparent 1px 170px), repeating-linear-gradient(100deg, rgba(255,255,255,.06) 0 6px, transparent 6px 22px), linear-gradient(135deg, #a36b39 0%, #7c4b25 48%, #936034 100%)',
-        backgroundPosition: '0 0, 0 0, 0 0',
-        backgroundSize: '170px 100%, 260px 100%, 100% 100%',
-      }}
+      className="hidden h-screen overflow-hidden bg-[#f4f1e8] text-slate-950 lg:block"
     >
-      <section className="mx-auto grid h-full max-w-[1500px] grid-cols-[270px_minmax(0,1fr)_335px] gap-5 p-6">
-        <aside className="flex min-h-0 flex-col gap-4">
-          <div className="relative rounded-[1.65rem] border border-white/70 bg-white p-5 pt-8 shadow-xl shadow-black/20">
-            <Pin />
-            <div className="flex flex-wrap gap-2">
-              <span className="rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1 text-[11px] font-black uppercase tracking-wide text-emerald-900">
-                Evergold
-              </span>
-              <span className="rounded-full border border-amber-200 bg-amber-50 px-3 py-1 text-[11px] font-black uppercase tracking-wide text-amber-950">
-                Spoetzl
-              </span>
+      <section className="mx-auto grid h-full max-w-[1500px] grid-rows-[88px_minmax(0,1fr)] gap-4 p-5">
+        <header className="grid min-h-0 grid-cols-[minmax(0,1fr)_680px] items-center gap-4 rounded-xl border border-slate-200 bg-white px-5 shadow-sm">
+          <div className="flex min-w-0 items-center gap-4">
+            <div className="relative h-16 w-16 shrink-0 overflow-hidden rounded-lg bg-slate-200">
+              <Image
+                src={projectProofAssets[0].src}
+                alt={projectProofAssets[0].alt}
+                fill
+                sizes="64px"
+                className="object-cover"
+              />
             </div>
-            <p className="mt-5 text-xs font-black uppercase tracking-[0.22em] text-amber-800">
-              Board mission
-            </p>
-            <h1 className="mt-2 text-3xl font-black leading-tight text-emerald-950">
-              Alignment and clarity
-            </h1>
-            <p className="mt-3 text-sm leading-6 text-slate-700">
-              Achieve alignment through visual collaboration, exchanged ideas,
-              articulated terms, and signed agreements.
-            </p>
-          </div>
-
-          <nav className="relative rounded-[1.65rem] border border-white/70 bg-white/95 p-4 pt-8 shadow-xl shadow-black/15">
-            <Pin className="bg-blue-500" />
-            <p className="mb-3 text-xs font-black uppercase tracking-wide text-slate-500">
-              Open a board tile
-            </p>
-            <div className="space-y-2">
-              {quickActions.map((action) => {
-                const Icon = action.icon;
-                return (
-                  <Link
-                    key={action.href}
-                    href={action.href}
-                    className="group flex items-center gap-3 rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 transition hover:border-emerald-300 hover:bg-emerald-50"
-                  >
-                    <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white text-emerald-800 shadow-sm">
-                      <Icon className="h-5 w-5" />
-                    </span>
-                    <span className="min-w-0">
-                      <span className="block text-sm font-black text-slate-950">
-                        {action.label}
-                      </span>
-                      <span className="line-clamp-1 text-xs text-slate-500">
-                        {action.detail}
-                      </span>
-                    </span>
-                    <ArrowRight className="ml-auto h-4 w-4 text-slate-400 transition group-hover:translate-x-1 group-hover:text-emerald-800" />
-                  </Link>
-                );
-              })}
-            </div>
-          </nav>
-
-          <div className="relative mt-auto rounded-[1.65rem] border border-amber-200 bg-amber-50 p-4 pt-8 shadow-xl shadow-black/15">
-            <Pin className="bg-amber-500" />
-            <p className="text-xs font-black uppercase tracking-wide text-amber-800">
-              Next milestone
-            </p>
-            <p className="mt-1 text-xl font-black text-amber-950">
-              {projectOverview.nextMilestone}
-            </p>
-            <p className="mt-1 text-sm font-semibold text-amber-900/80">
-              {projectOverview.nextMilestoneDate}
-            </p>
-          </div>
-        </aside>
-
-        <section className="grid min-h-0 grid-rows-[260px_minmax(0,1fr)] gap-5">
-          <div className="relative h-full rounded-[1.85rem] border border-white/70 bg-white p-6 pt-8 shadow-xl shadow-black/20">
-            <Pin />
-            <div className="flex items-start justify-between gap-6">
-              <div>
-                <p className="text-sm font-black uppercase tracking-wide text-emerald-800">
-                  {projectOverview.location}
-                </p>
-                <h2 className="mt-2 max-w-3xl text-5xl font-black leading-[0.98] text-emerald-950">
-                  Clarity Board
-                </h2>
-                <p className="mt-3 max-w-2xl text-base leading-7 text-slate-700">
-                  {projectOverview.name} turns zones, evidence, terms, approvals,
-                  and next actions into one shared visual workspace.
-                </p>
-                <VisualAssetStrip
-                  fallbackAssets={projectProofAssets}
-                  limit={4}
-                  size="xs"
-                  compact
-                  showHeader={false}
-                  showMeta={false}
-                  interactiveAssets={false}
-                  className="mt-4 max-w-md"
-                />
-              </div>
-              <div className="w-[330px] rounded-2xl border border-amber-200 bg-amber-50 p-3.5">
-                <div className="flex items-center gap-2 text-amber-800">
-                  <CalendarDays className="h-5 w-5" />
-                  <p className="text-xs font-black uppercase tracking-wide">
-                    What good looks like today
-                  </p>
-                </div>
-                <p className="mt-2 text-sm leading-5 text-amber-950/85">
-                  {projectOverview.today}
-                </p>
-              </div>
-            </div>
-          </div>
-
-          <div className="grid min-h-0 grid-cols-[1.15fr_0.85fr] gap-5">
-            <div className="relative flex min-h-0 flex-col rounded-[1.85rem] bg-slate-950 p-5 pt-8 text-white shadow-xl shadow-black/20">
-              <Pin className="bg-emerald-400" />
-              <div className="flex items-center justify-between gap-4">
-                <div>
-                  <p className="text-xs font-black uppercase tracking-wide text-emerald-200">
-                    Visual collaboration
-                  </p>
-                  <h3 className="mt-1 text-2xl font-black">Property zones</h3>
-                </div>
-                <Map className="h-8 w-8 text-emerald-300" />
-              </div>
-
-              <div className="mt-4 grid flex-1 grid-cols-2 gap-3">
-                {projectZones.slice(0, 3).map((zone, index) => (
-                  <Link
-                    key={zone.id}
-                    href="/maps"
-                    className={`group rounded-2xl border p-4 transition hover:-translate-y-0.5 ${
-                      index === 0
-                        ? 'col-span-2 border-emerald-300/40 bg-emerald-500/15'
-                        : 'border-white/10 bg-white/8 hover:bg-white/12'
-                    }`}
-                  >
-                    <div className="flex items-start gap-3">
-                      <VisualAssetThumbnail
-                        asset={getZoneVisualProof(zone, 1)[0]}
-                        size="sm"
-                        showMeta={false}
-                        interactive={false}
-                        className="shrink-0"
-                      />
-                      <div className="min-w-0 flex-1">
-                        <div className="flex items-start justify-between gap-3">
-                          <p className="text-lg font-black">{zone.name}</p>
-                          <span className={`rounded-full border px-2 py-1 text-[10px] font-black ${getToneClasses(zone.tone)}`}>
-                            {zone.status}
-                          </span>
-                        </div>
-                        <p className="mt-2 line-clamp-2 text-sm leading-5 text-white/70">
-                          {zone.summary}
-                        </p>
-                      </div>
-                    </div>
-                    <p className="mt-3 text-xs font-black uppercase tracking-wide text-emerald-200">
-                      {zone.openQuestions} open question{zone.openQuestions === 1 ? '' : 's'}
-                    </p>
-                  </Link>
-                ))}
-              </div>
-            </div>
-
-            <div className="flex min-h-0 flex-col gap-5">
-              <div className="relative rounded-[1.65rem] border border-white/70 bg-white p-3.5 pt-7 shadow-xl shadow-black/15">
-                <Pin className="bg-blue-500" />
-                <div className="flex items-center justify-between gap-4">
-                  <div>
-                    <p className="text-xs font-black uppercase tracking-wide text-blue-800">
-                      Terms and agreements
-                    </p>
-                    <h3 className="mt-1 text-2xl font-black">Decision queue</h3>
-                  </div>
-                  <CheckCircle2 className="h-8 w-8 text-blue-700" />
-                </div>
-                <div className="mt-2 space-y-2">
-                  {approvalItems.map((approval) => (
-                    <Link
-                      key={approval.id}
-                      href="/proposals"
-                      className="flex items-center justify-between gap-4 rounded-2xl border border-slate-200 px-3 py-2 transition hover:border-blue-300 hover:bg-blue-50"
-                    >
-                      <span>
-                        <span className="block text-sm font-black">{approval.title}</span>
-                        <span className="text-xs text-slate-500">Due {approval.due}</span>
-                      </span>
-                      <span className="rounded-full border border-blue-200 bg-blue-50 px-2.5 py-1 text-xs font-black text-blue-900">
-                        {approval.status}
-                      </span>
-                    </Link>
-                  ))}
-                </div>
-              </div>
-
-            <div className="relative min-h-0 flex-1 rounded-[1.65rem] border border-white/70 bg-white p-4 pt-8 shadow-xl shadow-black/15">
-                <Pin className="bg-slate-700" />
-                <div className="flex items-center gap-3">
-                  <Brain className="h-7 w-7 text-slate-900" />
-                  <div>
-                    <p className="text-xs font-black uppercase tracking-wide text-slate-500">
-                      Hermes
-                    </p>
-                    <h3 className="text-2xl font-black">Clarity question</h3>
-                  </div>
-                </div>
-                {highPriorityGaps.slice(0, 1).map((gap) => (
-                  <Link
-                    key={gap.id}
-                    href="/clarity"
-                    className="mt-4 block rounded-2xl border border-amber-200 bg-amber-50 p-4 transition hover:border-amber-300"
-                  >
-                    <p className="text-xs font-black uppercase tracking-wide text-amber-800">
-                      {gap.zone}
-                    </p>
-                    <p className="mt-1 text-sm font-bold leading-5 text-amber-950">
-                      {gap.question}
-                    </p>
-                    <div className="mt-3">
-                      <VisualAssetThumbnail
-                        asset={getClarityGapVisualProof(gap, 1)[0]}
-                        size="sm"
-                        showMeta={false}
-                        interactive={false}
-                      />
-                    </div>
-                  </Link>
-                ))}
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <aside className="flex min-h-0 flex-col gap-4">
-          <div className="relative rounded-[1.65rem] border border-white/70 bg-white p-4 pt-8 shadow-xl shadow-black/15">
-            <Pin />
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-xs font-black uppercase tracking-wide text-slate-500">
-                  Current phase
-                </p>
-                <h3 className="mt-1 text-2xl font-black text-slate-950">
-                  {projectOverview.phase}
-                </h3>
-              </div>
-              <ShieldCheck className="h-8 w-8 text-emerald-700" />
-            </div>
-            <div className="mt-3 rounded-2xl bg-slate-950 p-4 text-white">
-              <p className="text-xs font-black uppercase tracking-wide text-white/55">
-                Project health
+            <div className="min-w-0">
+              <p className="text-xs font-black uppercase tracking-wide text-emerald-800">
+                Evergold x Spoetzl - {projectOverview.location}
               </p>
-              <p className="mt-1 text-xl font-black text-amber-200">
-                {projectOverview.health}
+              <h1 className="truncate text-4xl font-black leading-none text-emerald-950">
+                Clarity Board
+              </h1>
+              <p className="mt-1 truncate text-sm font-semibold text-slate-500">
+                {projectOverview.phase}
               </p>
             </div>
           </div>
 
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-4 gap-3">
             {projectMetrics.map((metric) => (
-              <div key={metric.label} className={`relative rounded-2xl border p-3.5 pt-6 shadow-xl shadow-black/10 ${getToneClasses(metric.tone)}`}>
-                <Pin className="top-2 h-2.5 w-2.5 bg-white" />
-                <p className="text-3xl font-black">{metric.value}</p>
-                <p className="mt-1 text-xs font-black leading-4">{metric.label}</p>
-              </div>
+              <MetricTile key={metric.label} metric={metric} />
             ))}
           </div>
+        </header>
 
-          <div className="relative mt-auto rounded-[1.65rem] border border-white/70 bg-white p-4 pt-8 shadow-xl shadow-black/15">
-            <Pin className="bg-amber-500" />
-            <div className="flex items-center gap-3">
-              <Sparkles className="h-7 w-7 text-amber-700" />
-              <div>
-                <p className="text-xs font-black uppercase tracking-wide text-amber-800">
-                  Timeline
-                </p>
-                <h3 className="text-2xl font-black">Next movement</h3>
-              </div>
+        <section className="grid min-h-0 grid-cols-[minmax(0,1fr)_330px] gap-4">
+          <div className="grid min-h-0 grid-rows-[minmax(0,1fr)_182px] gap-4">
+            <div className="grid min-h-0 grid-cols-[1.05fr_0.95fr] gap-4">
+              <section className="flex min-h-0 flex-col rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
+                <div className="flex items-center justify-between gap-4">
+                  <div>
+                    <p className="text-xs font-black uppercase tracking-wide text-slate-500">
+                      Today proof
+                    </p>
+                    <h2 className="text-2xl font-black text-slate-950">
+                      See first, decide faster
+                    </h2>
+                  </div>
+                  <Link
+                    href="/images"
+                    className="inline-flex items-center gap-1 rounded-full border border-slate-200 px-3 py-2 text-xs font-black text-slate-700 transition hover:border-emerald-300 hover:text-emerald-800"
+                  >
+                    Photos <ArrowRight className="h-3.5 w-3.5" />
+                  </Link>
+                </div>
+
+                <div className="mt-3 grid min-h-0 flex-1 grid-cols-[minmax(0,1.18fr)_0.82fr] gap-3">
+                  <ProofImageTile
+                    asset={projectProofAssets[0]}
+                    href="/images"
+                    className="h-full min-h-0"
+                  >
+                    <div className="absolute inset-x-0 bottom-0 p-4 text-white">
+                      <p className="text-[11px] font-black uppercase tracking-wide text-white/70">
+                        Visual evidence
+                      </p>
+                      <p className="mt-1 text-2xl font-black leading-tight">
+                        {projectProofAssets[0].title}
+                      </p>
+                      <p className="mt-1 text-sm font-semibold text-white/75">
+                        Open image board
+                      </p>
+                    </div>
+                  </ProofImageTile>
+
+                  <div className="grid min-h-0 grid-rows-3 gap-3">
+                    {projectProofAssets.slice(1, 4).map((asset) => (
+                      <ProofImageTile
+                        key={asset.id}
+                        asset={asset}
+                        href={asset.href ?? '/images'}
+                        className="min-h-0"
+                      >
+                        <div className="absolute inset-x-0 bottom-0 p-3 text-white">
+                          <p className="truncate text-sm font-black">{asset.title}</p>
+                          <p className="truncate text-[11px] font-semibold text-white/70">
+                            {asset.contextLabel}
+                          </p>
+                        </div>
+                      </ProofImageTile>
+                    ))}
+                  </div>
+                </div>
+              </section>
+
+              <nav className="flex min-h-0 flex-col rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-xs font-black uppercase tracking-wide text-slate-500">
+                      Board tiles
+                    </p>
+                    <h2 className="text-2xl font-black text-slate-950">Where to go</h2>
+                  </div>
+                  <Map className="h-7 w-7 text-emerald-700" />
+                </div>
+                <div className="mt-3 grid min-h-0 flex-1 grid-cols-2 auto-rows-fr gap-3">
+                  {quickActions.map((action, index) => (
+                    <ActionTile key={action.href} action={action} index={index} />
+                  ))}
+                </div>
+              </nav>
             </div>
-            <div className="mt-4 rounded-2xl border border-slate-200 bg-slate-50 p-4">
-              <p className="text-xs font-black uppercase tracking-wide text-slate-500">
-                {nextEvent.date} - {nextEvent.status}
-              </p>
-              <p className="mt-1 font-black">{nextEvent.title}</p>
-              <p className="mt-1 text-sm leading-5 text-slate-600">{nextEvent.detail}</p>
-            </div>
-            <Link
-              href="/walkthroughs"
-              className="mt-4 inline-flex items-center gap-2 text-sm font-black text-emerald-800"
-            >
-              Open walkthroughs <ArrowRight className="h-4 w-4" />
-            </Link>
+
+            <section className="grid min-h-0 grid-cols-4 gap-4">
+              {zoneTiles.map((zone) => (
+                <Link
+                  key={zone.id}
+                  href="/maps"
+                  className="group min-h-0 rounded-xl border border-slate-200 bg-white p-3 shadow-sm transition hover:-translate-y-0.5 hover:border-emerald-300 hover:shadow-md"
+                >
+                  <VisualAssetThumbnail
+                    asset={getZoneVisualProof(zone, 1)[0]}
+                    size="full"
+                    aspect="landscape"
+                    showTitle={false}
+                    showMeta={false}
+                    interactive={false}
+                    className="border-0 bg-transparent p-0 shadow-none"
+                  />
+                  <div className="mt-3 flex items-start justify-between gap-3">
+                    <div className="min-w-0">
+                      <p className="truncate text-base font-black text-slate-950">
+                        {zone.name}
+                      </p>
+                      <p className="mt-0.5 text-xs font-semibold text-slate-500">
+                        {zone.openQuestions} open question{zone.openQuestions === 1 ? '' : 's'}
+                      </p>
+                    </div>
+                    <span className={`shrink-0 rounded-full border px-2 py-1 text-[10px] font-black ${getToneClasses(zone.tone)}`}>
+                      {zone.status}
+                    </span>
+                  </div>
+                </Link>
+              ))}
+            </section>
           </div>
 
-        </aside>
+          <aside className="flex min-h-0 flex-col gap-4">
+            <section className="rounded-xl border border-slate-200 bg-slate-950 p-4 text-white shadow-sm">
+              <div className="flex items-center justify-between gap-4">
+                <div className="min-w-0">
+                  <p className="text-xs font-black uppercase tracking-wide text-white/50">
+                    Project health
+                  </p>
+                  <p className="mt-1 line-clamp-2 text-xl font-black leading-tight text-amber-200">
+                    {projectOverview.health}
+                  </p>
+                </div>
+                <ShieldCheck className="h-8 w-8 shrink-0 text-emerald-300" />
+              </div>
+            </section>
+
+            <section className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
+              <div className="flex items-center justify-between gap-3">
+                <div>
+                  <p className="text-xs font-black uppercase tracking-wide text-blue-800">
+                    Decisions
+                  </p>
+                  <h2 className="text-xl font-black">Approval queue</h2>
+                </div>
+                <CheckCircle2 className="h-7 w-7 text-blue-700" />
+              </div>
+              <div className="mt-3 space-y-2">
+                {approvalItems.slice(0, 2).map((approval) => (
+                  <Link
+                    key={approval.id}
+                    href="/proposals"
+                    className="flex items-center justify-between gap-3 rounded-lg border border-slate-200 px-3 py-2 transition hover:border-blue-300 hover:bg-blue-50"
+                  >
+                    <span className="min-w-0">
+                      <span className="block truncate text-sm font-black">
+                        {approval.title}
+                      </span>
+                      <span className="text-xs font-semibold text-slate-500">
+                        Due {approval.due}
+                      </span>
+                    </span>
+                    <span className="rounded-full border border-blue-200 bg-blue-50 px-2 py-1 text-[11px] font-black text-blue-900">
+                      {approval.status}
+                    </span>
+                  </Link>
+                ))}
+              </div>
+            </section>
+
+            <section className="rounded-xl border border-amber-200 bg-amber-50 p-4 shadow-sm">
+              <div className="flex items-center gap-3">
+                <Brain className="h-7 w-7 shrink-0 text-amber-800" />
+                <div className="min-w-0">
+                  <p className="text-xs font-black uppercase tracking-wide text-amber-800">
+                    Top clarity need
+                  </p>
+                  <h2 className="truncate text-xl font-black text-amber-950">
+                    {primaryGap.zone}
+                  </h2>
+                </div>
+              </div>
+              <Link
+                href="/clarity"
+                className="mt-3 grid grid-cols-[4.5rem_minmax(0,1fr)] gap-3 rounded-lg border border-amber-200 bg-white/70 p-2 transition hover:border-amber-300 hover:bg-white"
+              >
+                <VisualAssetThumbnail
+                  asset={getClarityGapVisualProof(primaryGap, 1)[0]}
+                  size="full"
+                  showTitle={false}
+                  showMeta={false}
+                  interactive={false}
+                  className="border-0 bg-transparent p-0 shadow-none"
+                />
+                <span className="min-w-0 py-1">
+                  <span className="block line-clamp-2 text-sm font-black text-amber-950">
+                    {primaryGap.title}
+                  </span>
+                  <span className="mt-1 block text-xs font-semibold text-amber-800">
+                    Open question details
+                  </span>
+                </span>
+              </Link>
+            </section>
+
+            <section className="mt-auto rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
+              <div className="flex items-center gap-3">
+                <Sparkles className="h-7 w-7 text-emerald-700" />
+                <div className="min-w-0">
+                  <p className="text-xs font-black uppercase tracking-wide text-slate-500">
+                    Next movement
+                  </p>
+                  <h2 className="truncate text-xl font-black">{nextEvent.title}</h2>
+                </div>
+              </div>
+              <p className="mt-2 text-xs font-black uppercase tracking-wide text-slate-500">
+                {nextEvent.date} - {nextEvent.status}
+              </p>
+              <Link
+                href="/walkthroughs"
+                className="mt-3 inline-flex items-center gap-2 text-sm font-black text-emerald-800"
+              >
+                Walkthroughs <ArrowRight className="h-4 w-4" />
+              </Link>
+            </section>
+          </aside>
+        </section>
       </section>
     </main>
   );
 }
 
 function MobileHome() {
+  const nextEvent = timelineEvents.find((event) => event.status !== 'Done') ?? timelineEvents[0];
+  const primaryGap = highPriorityGaps[0] ?? clarityGaps[0];
+  const zoneTiles = activeZones.slice(0, 3);
+
   return (
     <main className="min-h-screen bg-[#f7f4ec] pb-24 text-slate-950 lg:hidden">
-      <section className="border-b border-amber-900/10 bg-white">
-        <div className="mx-auto grid w-full min-w-0 max-w-7xl gap-8 px-4 py-6 sm:px-6 lg:grid-cols-[1.15fr_0.85fr] lg:px-8 lg:py-10">
-          <div className="min-w-0 space-y-6">
-            <div className="flex flex-wrap gap-2">
-              <span className="rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1 text-xs font-bold uppercase tracking-wide text-emerald-900">
-                Evergold x Spoetzl
-              </span>
-              <span className="rounded-full border border-amber-200 bg-amber-50 px-3 py-1 text-xs font-bold uppercase tracking-wide text-amber-950">
-                Shiner, Texas
-              </span>
-            </div>
+      <section className="px-4 pb-6 pt-5">
+        <div className="flex flex-wrap gap-2">
+          <span className="rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1 text-xs font-black uppercase tracking-wide text-emerald-900">
+            Evergold x Spoetzl
+          </span>
+          <span className="rounded-full border border-amber-200 bg-amber-50 px-3 py-1 text-xs font-black uppercase tracking-wide text-amber-950">
+            Shiner, Texas
+          </span>
+        </div>
 
-            <div>
-              <p className="text-sm font-semibold uppercase tracking-wide text-amber-800">
-                Today command center
-              </p>
-              <h1 className="mt-2 max-w-4xl text-4xl font-black leading-[1.02] text-emerald-950 sm:text-5xl lg:text-6xl">
-                {projectOverview.name}
-              </h1>
-              <p className="mt-4 max-w-2xl text-lg leading-8 text-slate-700">
-                {projectOverview.primaryGoal}
-              </p>
-            </div>
+        <div className="mt-4">
+          <p className="text-xs font-black uppercase tracking-wide text-amber-800">
+            Today command center
+          </p>
+          <h1 className="mt-1 text-4xl font-black leading-none text-emerald-950">
+            Clarity Board
+          </h1>
+          <p className="mt-2 text-sm font-semibold text-slate-600">
+            {projectOverview.name}
+          </p>
+        </div>
 
-            <div className="rounded-2xl border border-amber-200 bg-amber-50 p-4 shadow-sm sm:p-5">
-              <div className="flex items-start gap-3">
-                <CalendarDays className="mt-1 h-5 w-5 flex-none text-amber-700" />
-                <div>
-                  <p className="font-bold text-amber-950">What good looks like today</p>
-                  <p className="mt-1 text-sm leading-6 text-amber-950/80">
-                    {projectOverview.today}
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4 shadow-sm">
-              <VisualAssetStrip
-                title="Today visual proof"
-                eyebrow="Field media"
-                description="Live uploads appear first; curated references hold the place until proof is attached."
-                fallbackAssets={projectProofAssets}
-                limit={5}
-                size="sm"
-                compact
-                href="/images"
-              />
-            </div>
-
-            <div className="grid gap-3 sm:grid-cols-2">
-              {quickActions.map((action) => {
-                const Icon = action.icon;
-                return (
-                  <Link
-                    key={action.href}
-                    href={action.href}
-                    className={`${action.className} group rounded-2xl p-4 shadow-sm transition hover:-translate-y-0.5 hover:shadow-lg`}
-                  >
-                    <div className="flex items-start justify-between gap-4">
-                      <Icon className="h-6 w-6" />
-                      <ArrowRight className="h-5 w-5 opacity-70 transition group-hover:translate-x-1" />
-                    </div>
-                    <p className="mt-5 text-lg font-black">{action.label}</p>
-                    <p className="mt-1 text-sm leading-5 opacity-85">{action.detail}</p>
-                  </Link>
-                );
-              })}
-            </div>
+        <ProofImageTile
+          asset={projectProofAssets[0]}
+          href="/images"
+          className="mt-5 aspect-[4/3]"
+        >
+          <div className="absolute inset-x-0 bottom-0 p-4 text-white">
+            <p className="text-[11px] font-black uppercase tracking-wide text-white/70">
+              Today proof
+            </p>
+            <p className="mt-1 text-2xl font-black leading-tight">
+              {projectProofAssets[0].title}
+            </p>
+            <p className="mt-1 text-sm font-semibold text-white/75">
+              Tap for field media
+            </p>
           </div>
+        </ProofImageTile>
 
-          <aside className="min-w-0 rounded-3xl border border-slate-200 bg-slate-950 p-5 text-white shadow-xl lg:p-6">
-            <div className="flex items-center justify-between gap-4">
-              <div>
-                <p className="text-sm font-semibold text-emerald-200">Current phase</p>
-                <h2 className="mt-1 text-2xl font-black">{projectOverview.phase}</h2>
-              </div>
-              <ShieldCheck className="h-9 w-9 text-emerald-300" />
-            </div>
-
-            <div className="mt-6 rounded-2xl bg-white/10 p-4">
-              <p className="text-sm font-semibold text-white/70">Project health</p>
-              <p className="mt-2 text-xl font-black text-amber-200">{projectOverview.health}</p>
-            </div>
-
-            <div className="mt-5 grid grid-cols-2 gap-3">
-              {projectMetrics.map((metric) => (
-                <div key={metric.label} className="rounded-2xl bg-white p-4 text-slate-950">
-                  <p className="text-2xl font-black">{metric.value}</p>
-                  <p className="mt-1 text-sm font-bold">{metric.label}</p>
-                  <p className="mt-1 text-xs leading-5 text-slate-600">{metric.detail}</p>
-                </div>
-              ))}
-            </div>
-
-            <Link
-              href="/walkthroughs"
-              className="mt-5 flex items-center justify-between rounded-2xl border border-white/15 bg-white/10 p-4 text-sm font-bold transition hover:bg-white/15"
-            >
-              <span>
-                Next milestone: {projectOverview.nextMilestone}
-                <span className="block text-white/65">{projectOverview.nextMilestoneDate}</span>
-              </span>
-              <ArrowRight className="h-5 w-5" />
-            </Link>
-          </aside>
+        <div className="mt-3 grid grid-cols-2 gap-2">
+          {projectMetrics.map((metric) => (
+            <MetricTile key={metric.label} metric={metric} />
+          ))}
         </div>
       </section>
 
-      <section className="mx-auto grid w-full min-w-0 max-w-7xl gap-5 px-4 py-6 sm:px-6 lg:grid-cols-[0.9fr_1.1fr] lg:px-8">
-        <div className="min-w-0 space-y-5">
-          <div className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
-            <div className="flex items-center justify-between gap-3">
-              <div>
-                <p className="text-sm font-bold uppercase tracking-wide text-blue-800">
-                  Approval queue
-                </p>
-                <h2 className="mt-1 text-2xl font-black">Ready for clean decisions</h2>
-              </div>
-              <CheckCircle2 className="h-8 w-8 text-blue-700" />
-            </div>
-
-            <div className="mt-5 space-y-3">
-              {approvalItems.map((approval) => (
-                <Link
-                  key={approval.id}
-                  href="/proposals"
-                  className="block rounded-2xl border border-slate-200 p-4 transition hover:border-blue-300 hover:bg-blue-50"
-                >
-                  <div className="flex items-start justify-between gap-4">
-                    <div>
-                      <p className="font-black">{approval.title}</p>
-                      <p className="mt-1 text-sm leading-5 text-slate-600">{approval.target}</p>
-                    </div>
-                    <span className="rounded-full border border-blue-200 bg-blue-50 px-2.5 py-1 text-xs font-bold text-blue-900">
-                      {approval.status}
-                    </span>
-                  </div>
-                  <p className="mt-3 text-xs font-semibold text-slate-500">Due {approval.due}</p>
-                </Link>
-              ))}
-            </div>
-
-            <Link
-              href="/proposals"
-              className="mt-4 inline-flex items-center gap-2 text-sm font-black text-blue-800"
-            >
-              Review approval packet <ArrowRight className="h-4 w-4" />
-            </Link>
-          </div>
-
-          <div className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
-            <div className="flex items-center gap-3">
-              <Brain className="h-7 w-7 text-slate-900" />
-              <div>
-                <p className="text-sm font-bold uppercase tracking-wide text-slate-500">
-                  Hermes daily intelligence
-                </p>
-                <h2 className="text-2xl font-black">Memory-backed clarity loop</h2>
-              </div>
-            </div>
-            <p className="mt-4 text-sm leading-6 text-slate-700">
-              Hermes watches the relationship between Evergold and Spoetzl for
-              misalignment: unclear scope, missing decisions, risky assumptions,
-              and approvals that should be locked before work starts.
+      <section className="px-4 pb-6">
+        <div className="mb-3 flex items-center justify-between gap-3">
+          <div>
+            <p className="text-xs font-black uppercase tracking-wide text-slate-500">
+              Board tiles
             </p>
-            <div className="mt-4 grid gap-3">
-              {highPriorityGaps.slice(0, 2).map((gap) => (
-                <div key={gap.id} className="rounded-2xl border border-amber-200 bg-amber-50 p-4">
-                  <p className="text-xs font-black uppercase tracking-wide text-amber-800">
-                    Hermes question
-                  </p>
-                  <p className="mt-1 text-sm font-bold text-amber-950">{gap.question}</p>
-                </div>
-              ))}
-            </div>
-            <Link
-              href="/hermes"
-              className="mt-4 inline-flex items-center gap-2 text-sm font-black text-slate-900"
-            >
-              Open Hermes <ArrowRight className="h-4 w-4" />
-            </Link>
+            <h2 className="text-2xl font-black">Choose a path</h2>
           </div>
+          <ArrowRight className="h-5 w-5 text-slate-400" />
         </div>
+        <div className="grid grid-cols-2 gap-3">
+          {quickActions.map((action, index) => (
+            <MobileActionTile key={action.href} action={action} index={index} />
+          ))}
+        </div>
+      </section>
 
-        <div className="min-w-0 space-y-5">
-          <div className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm font-bold uppercase tracking-wide text-emerald-800">
-                  Zone focus
-                </p>
-                <h2 className="mt-1 text-2xl font-black">The property as shared language</h2>
-              </div>
-              <Map className="h-8 w-8 text-emerald-700" />
-            </div>
+      <section className="space-y-4 px-4 pb-6">
+        <Link
+          href="/clarity"
+          className="grid grid-cols-[6rem_minmax(0,1fr)] gap-3 rounded-xl border border-amber-200 bg-amber-50 p-3 shadow-sm"
+        >
+          <VisualAssetThumbnail
+            asset={getClarityGapVisualProof(primaryGap, 1)[0]}
+            size="full"
+            showTitle={false}
+            showMeta={false}
+            interactive={false}
+            className="border-0 bg-transparent p-0 shadow-none"
+          />
+          <span className="min-w-0 py-1">
+            <span className="block text-xs font-black uppercase tracking-wide text-amber-800">
+              Top clarity need
+            </span>
+            <span className="mt-1 block line-clamp-2 text-lg font-black leading-tight text-amber-950">
+              {primaryGap.title}
+            </span>
+            <span className="mt-1 block text-sm font-semibold text-amber-800">
+              Open details
+            </span>
+          </span>
+        </Link>
 
-            <div className="mt-5 grid gap-3 sm:grid-cols-2">
-              {activeZones.map((zone) => (
-                <Link
-                  key={zone.id}
-                  href="/maps"
-                  className="rounded-2xl border border-slate-200 p-4 transition hover:border-emerald-300 hover:bg-emerald-50"
-                >
-                  <div className="flex items-start justify-between gap-3">
-                    <p className="font-black">{zone.name}</p>
-                    <span className={`rounded-full border px-2 py-1 text-[11px] font-black ${getToneClasses(zone.tone)}`}>
-                      {zone.status}
-                    </span>
-                  </div>
-                  <p className="mt-2 line-clamp-2 text-sm leading-5 text-slate-600">
-                    {zone.summary}
-                  </p>
-                  <p className="mt-3 text-xs font-bold text-slate-500">
-                    {zone.openQuestions} open question{zone.openQuestions === 1 ? '' : 's'}
-                  </p>
-                </Link>
-              ))}
-            </div>
+        <Link
+          href="/proposals"
+          className="flex items-center justify-between gap-4 rounded-xl border border-blue-200 bg-white p-4 shadow-sm"
+        >
+          <span>
+            <span className="block text-xs font-black uppercase tracking-wide text-blue-800">
+              Approval queue
+            </span>
+            <span className="mt-1 block text-lg font-black">
+              {approvalItems.length} decisions waiting
+            </span>
+          </span>
+          <CheckCircle2 className="h-8 w-8 text-blue-700" />
+        </Link>
+      </section>
+
+      <section className="px-4 pb-6">
+        <div className="mb-3 flex items-center justify-between gap-3">
+          <div>
+            <p className="text-xs font-black uppercase tracking-wide text-emerald-800">
+              Property zones
+            </p>
+            <h2 className="text-2xl font-black">Visual map cues</h2>
           </div>
-
-          <div className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
-            <div className="flex items-center gap-3">
-              <Sparkles className="h-7 w-7 text-amber-700" />
-              <div>
-                <p className="text-sm font-bold uppercase tracking-wide text-amber-800">
-                  Timeline
-                </p>
-                <h2 className="text-2xl font-black">From idea to signed scope</h2>
-              </div>
-            </div>
-
-            <div className="mt-5 space-y-3">
-              {timelineEvents.map((event) => (
-                <div key={`${event.date}-${event.title}`} className="flex gap-3">
-                  <div className="flex flex-col items-center">
-                    <div
-                      className={`h-3 w-3 rounded-full ${
-                        event.status === 'Today'
-                          ? 'bg-amber-600'
-                          : event.status === 'Done'
-                            ? 'bg-emerald-600'
-                            : 'bg-slate-300'
-                      }`}
-                    />
-                    <div className="mt-1 h-full min-h-10 w-px bg-slate-200" />
-                  </div>
-                  <div className="pb-3">
-                    <p className="text-xs font-bold uppercase tracking-wide text-slate-500">
-                      {event.date} - {event.status}
-                    </p>
-                    <p className="mt-1 font-black">{event.title}</p>
-                    <p className="mt-1 text-sm leading-5 text-slate-600">{event.detail}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <div className="grid gap-3 sm:grid-cols-2">
+          <Map className="h-7 w-7 text-emerald-700" />
+        </div>
+        <div className="grid gap-3">
+          {zoneTiles.map((zone) => (
             <Link
-              href="/work"
-              className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition hover:border-emerald-300 hover:bg-emerald-50"
+              key={zone.id}
+              href="/maps"
+              className="grid grid-cols-[6rem_minmax(0,1fr)] gap-3 rounded-xl border border-slate-200 bg-white p-3 shadow-sm transition active:scale-[0.98]"
             >
-              <PenLine className="h-7 w-7 text-emerald-700" />
-              <p className="mt-4 text-lg font-black">Work log</p>
-              <p className="mt-1 text-sm leading-5 text-slate-600">
-                Daily field updates, blockers, and client-visible notes.
-              </p>
+              <VisualAssetThumbnail
+                asset={getZoneVisualProof(zone, 1)[0]}
+                size="full"
+                aspect="square"
+                showTitle={false}
+                showMeta={false}
+                interactive={false}
+                className="border-0 bg-transparent p-0 shadow-none"
+              />
+              <span className="min-w-0 py-1">
+                <span className="flex items-center justify-between gap-3">
+                  <span className="truncate font-black">{zone.name}</span>
+                  <span className={`shrink-0 rounded-full border px-2 py-1 text-[10px] font-black ${getToneClasses(zone.tone)}`}>
+                    {zone.status}
+                  </span>
+                </span>
+                <span className="mt-2 block text-sm font-semibold text-slate-500">
+                  {zone.openQuestions} open question{zone.openQuestions === 1 ? '' : 's'}
+                </span>
+              </span>
             </Link>
-            <Link
-              href="/walkthroughs"
-              className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition hover:border-blue-300 hover:bg-blue-50"
-            >
-              <MessageSquare className="h-7 w-7 text-blue-700" />
-              <p className="mt-4 text-lg font-black">Walkthroughs</p>
-              <p className="mt-1 text-sm leading-5 text-slate-600">
-                Requirement walks, progress reviews, punch lists, and summaries.
+          ))}
+        </div>
+      </section>
+
+      <section className="px-4 pb-6">
+        <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
+          <div className="flex items-center gap-3">
+            <CalendarDays className="h-7 w-7 text-emerald-700" />
+            <div className="min-w-0">
+              <p className="text-xs font-black uppercase tracking-wide text-slate-500">
+                Next movement
               </p>
-            </Link>
+              <h2 className="truncate text-xl font-black">{nextEvent.title}</h2>
+            </div>
           </div>
+          <p className="mt-2 text-sm font-semibold text-slate-600">
+            {nextEvent.date} - {nextEvent.status}
+          </p>
+          <Link
+            href="/walkthroughs"
+            className="mt-3 inline-flex items-center gap-2 text-sm font-black text-emerald-800"
+          >
+            Walkthroughs <ArrowRight className="h-4 w-4" />
+          </Link>
         </div>
       </section>
     </main>

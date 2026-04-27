@@ -90,6 +90,20 @@ export default function ResearchCenterPage() {
               <span className="hidden sm:inline">Contents</span>
             </button>
           </div>
+          <div className="mt-4 flex flex-wrap gap-2">
+            <Link
+              href="/busch-gardens"
+              className="inline-flex items-center rounded-full border border-green-200 bg-green-50 px-3 py-2 text-sm font-semibold text-green-900 transition hover:border-green-300 hover:bg-green-100"
+            >
+              Busch Gardens image gallery
+            </Link>
+            <Link
+              href="/images"
+              className="inline-flex items-center rounded-full border border-amber-200 bg-amber-50 px-3 py-2 text-sm font-semibold text-amber-950 transition hover:border-amber-300 hover:bg-amber-100"
+            >
+              All visual references
+            </Link>
+          </div>
         </div>
       </header>
 

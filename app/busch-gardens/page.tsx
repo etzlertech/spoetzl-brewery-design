@@ -7,12 +7,19 @@ export default function BuschGardensPage() {
       {/* Header */}
       <header className="bg-gradient-to-r from-green-900 to-amber-800 text-white shadow-lg">
         <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between">
-            <Link href="/" className="text-lg font-semibold hover:text-amber-200 transition">
-              ← Back to Home
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <Link href="/" className="text-base font-semibold transition hover:text-amber-200 sm:text-lg">
+              ← Home
             </Link>
-            <h1 className="text-2xl font-bold">Busch Gardens Inspiration</h1>
-            <div className="w-32"></div>
+            <h1 className="order-3 w-full text-center text-xl font-bold sm:order-none sm:w-auto sm:text-2xl">
+              Busch Gardens Inspiration
+            </h1>
+            <Link
+              href="/research"
+              className="rounded-full border border-white/35 px-4 py-2 text-sm font-semibold text-white transition hover:bg-white/10"
+            >
+              Articles
+            </Link>
           </div>
         </div>
       </header>
@@ -29,6 +36,20 @@ export default function BuschGardensPage() {
             a masterpiece of European-themed landscapes, gardens, and architecture
             that can inspire enhancements to the Spoetzl Brewery grounds.
           </p>
+          <div className="mt-6 flex flex-wrap justify-center gap-3">
+            <Link
+              href="/research"
+              className="inline-flex items-center rounded-full bg-green-800 px-5 py-3 text-sm font-bold text-white shadow-sm transition hover:bg-green-900"
+            >
+              Open inspiration articles
+            </Link>
+            <Link
+              href="/research/busch-gardens/landscape-design"
+              className="inline-flex items-center rounded-full border border-green-200 bg-white px-5 py-3 text-sm font-bold text-green-900 shadow-sm transition hover:bg-green-50"
+            >
+              Read design principles
+            </Link>
+          </div>
         </div>
 
         {/* Features Overview */}

@@ -75,7 +75,7 @@ const imageBase = '/research/images';
 
 const curatedAssets = {
   entrance: {
-    file: '06-flower-beds-seasonal.jpg',
+    file: '07-spring-tulips-display.jpg',
     title: 'Arrival color direction',
     alt: 'Large seasonal flower bed display with massed color',
     label: 'Concept',
@@ -86,7 +86,7 @@ const curatedAssets = {
     tags: ['arrival', 'seasonal-color', 'entrance-sign-bed'],
   },
   path: {
-    file: '19-botanical-garden-path.jpg',
+    file: '14-bridge-architecture.jpg',
     title: 'Tour path rhythm',
     alt: 'Botanical garden path framed by layered planting',
     label: 'Before',
@@ -97,7 +97,7 @@ const curatedAssets = {
     tags: ['path', 'circulation', 'tour-path-edge'],
   },
   patio: {
-    file: '01-theme-park-landscape.jpg',
+    file: '23-river-cruise-scenery.jpg',
     title: 'Guest-facing photo edge',
     alt: 'Intensive theme park landscape with bold layered planting',
     label: 'Reference',
@@ -108,7 +108,7 @@ const curatedAssets = {
     tags: ['patio', 'photo-moment', 'taproom-patio-edge'],
   },
   eventLawn: {
-    file: '10-autumn-gardens.jpg',
+    file: '13-italian-architecture.jpg',
     title: 'Event-ready seasonal condition',
     alt: 'Autumn garden display showing seasonal color and event readiness',
     label: 'Progress',
@@ -119,7 +119,7 @@ const curatedAssets = {
     tags: ['event-lawn', 'seasonal-color', 'maintenance'],
   },
   parking: {
-    file: '08-themed-architecture-pathway.jpg',
+    file: '21-french-garden-chateau.jpg',
     title: 'Parking arrival edge',
     alt: 'Themed pedestrian pathway framed by architecture and planting',
     label: 'Before',
@@ -130,7 +130,7 @@ const curatedAssets = {
     tags: ['parking-arrival', 'arrival', 'path'],
   },
   utility: {
-    file: '20-greenhouse-production.jpg',
+    file: '19-botanical-garden-path.jpg',
     title: 'Back-of-house constraints',
     alt: 'Greenhouse production reference for operational landscape constraints',
     label: 'Issue',
@@ -141,7 +141,7 @@ const curatedAssets = {
     tags: ['utility-screening', 'operations', 'screening'],
   },
   formalGarden: {
-    file: '02-garden-design.jpg',
+    file: '14-bridge-architecture.jpg',
     title: 'Formal bed geometry',
     alt: 'Formal garden design with geometric planting structure',
     label: 'Reference',
@@ -152,7 +152,7 @@ const curatedAssets = {
     tags: ['specifications', 'geometry', 'acceptance-criteria'],
   },
   german: {
-    file: '12-german-architecture.jpg',
+    file: '14-bridge-architecture.jpg',
     title: 'Brewery heritage cue',
     alt: 'German architectural reference with brewery-adjacent character',
     label: 'Inspiration',
@@ -163,7 +163,7 @@ const curatedAssets = {
     tags: ['heritage', 'architecture', 'vision'],
   },
   water: {
-    file: '16-fountain-water-feature.jpg',
+    file: '23-river-cruise-scenery.jpg',
     title: 'Material and water moment',
     alt: 'European-style fountain and landscape focal point',
     label: 'Reference',
