@@ -4,7 +4,7 @@ import { usePathname } from 'next/navigation';
 import VisualNavigationDock from '@/components/layout/VisualNavigationDock';
 
 function usesDesktopRail(pathname: string) {
-  return !pathname.startsWith('/mapping');
+  return pathname !== '/' && !pathname.startsWith('/mapping');
 }
 
 function usesMapDock(pathname: string) {
